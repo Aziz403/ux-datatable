@@ -1,0 +1,43 @@
+{
+  "name": "aziz403/ux-datatablejs",
+  "type": "symfony-bundle",
+  "description": "Datatable.net integration for Symfony",
+  "homepage": "https://symfony.com",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Aziz Benmallouk",
+      "email": "azizbenmallouk4@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Symfony\\UX\\Datatable\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Symfony\\UX\\Datatable\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": ">=7.2.5",
+    "symfony/config": "^4.4.17|^5.0|^6.0",
+    "symfony/dependency-injection": "^4.4.17|^5.0|^6.0",
+    "symfony/http-kernel": "^4.4.17|^5.0|^6.0",
+    "doctrine/doctrine-bundle": "~2.6",
+    "doctrine/orm": "~2.13"
+  },
+  "require-dev": {
+    "symfony/framework-bundle": "^4.4.17|^5.0|^6.0",
+    "symfony/phpunit-bridge": "^5.2|^6.0",
+    "symfony/twig-bundle": "^4.4.17|^5.0|^6.0",
+    "symfony/var-dumper": "^4.4.17|^5.0|^6.0",
+    "symfony/webpack-encore-bundle": "^1.11"
+  },
+  "conflict": {
+    "symfony/flex": "<1.13",
+    "symfony/webpack-encore-bundle": "<1.11"
+  },
+  "minimum-stability": "dev"
+}
