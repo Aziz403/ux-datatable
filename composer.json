@@ -3,6 +3,11 @@
   "type": "symfony-bundle",
   "description": "Datatable.net integration for Symfony",
   "homepage": "https://symfony.com",
+  "keywords": [
+    "symfony",
+    "bundle",
+    "datatables"
+  ],
   "license": "MIT",
   "authors": [
     {
@@ -39,5 +44,6 @@
     "symfony/flex": "<1.13",
     "symfony/webpack-encore-bundle": "<1.11"
   },
+  "version": "0.0.1",
   "minimum-stability": "dev"
 }
