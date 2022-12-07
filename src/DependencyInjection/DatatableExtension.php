@@ -32,9 +32,14 @@ class DatatableExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $container
+            ->setDefinition('datatable.data_process', new Definition(DataProcess::class))
+            ->setPublic(false)
+        ;
+
+        $container
             ->setDefinition('datatable.builder', new Definition(ResponseBuilder::class))
             ->addArgument(new Reference('doctrine.orm.default_entity_manager'))
-            ->addArgument(new Reference(DataProcess::class))
+            ->addArgument(new Reference('datatable.data_process'))
             ->setPublic(false)
         ;
 
