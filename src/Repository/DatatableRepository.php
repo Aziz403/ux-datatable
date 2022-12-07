@@ -59,7 +59,7 @@ class DatatableRepository extends BaseRepository
 
     public function getCountAll()
     {
-        return $this->getQuery()->select("COUNT(".$this->alias.".id)")->getQuery()->getScalarResult() ?? 0;
+        return $this->getQuery()->select("COUNT(".$this->alias.".id)")->getQuery()->getSingleScalarResult() ?? 0;
     }
 
     /* start - dataTable base request queries */
