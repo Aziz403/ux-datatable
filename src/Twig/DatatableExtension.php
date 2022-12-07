@@ -13,7 +13,6 @@ namespace Symfony\UX\Datatable\Twig;
 
 use Symfony\UX\Datatable\Model\AbstractDatatable;
 use Symfony\UX\Datatable\Model\ComplexDatatable;
-use Symfony\UX\Datatable\Model\Datatable;
 use Symfony\WebpackEncoreBundle\Dto\StimulusControllersDto;
 use Symfony\WebpackEncoreBundle\Twig\StimulusTwigExtension;
 use Twig\Environment;
@@ -27,7 +26,7 @@ use Twig\TwigFunction;
  */
 class DatatableExtension extends AbstractExtension
 {
-    private $stimulus;
+    private StimulusTwigExtension $stimulus;
 
     public function __construct(StimulusTwigExtension $stimulus)
     {
@@ -38,6 +37,7 @@ class DatatableExtension extends AbstractExtension
     {
         return [
             new TwigFunction('render_datatable', [$this, 'renderDatatable'], ['needs_environment' => true, 'is_safe' => ['html']]),
+            new TwigFunction('datatable_controller', [$this, 'renderController'], ['needs_environment' => true, 'is_safe' => ['html']])
         ];
     }
 
@@ -53,11 +53,11 @@ class DatatableExtension extends AbstractExtension
 
         if (class_exists(StimulusControllersDto::class)) {
             $dto = new StimulusControllersDto($env);
-            foreach ($controllers as $name => $controllerValues) {
-                $dto->addController($name, $controllerValues);
+            foreach ($controllers as $controllerName => $controllerValues) {
+                $dto->addController($controllerName, $controllerValues);
             }
 
-            $html = '<table '.$dto.' ';//TODO: HTML Part
+            $html = '<table '.$dto.' ';
         } else {
             $html = '<table '.$this->stimulus->renderStimulusController($env, $controllers).' ';
         }
@@ -99,5 +99,25 @@ class DatatableExtension extends AbstractExtension
         }
 
         return trim($html).'</table>';
+    }
+
+    public function renderController(Environment $env, AbstractDatatable $datatable)
+    {
+        $controllers = [];
+        if ($datatable->getDataController()) {
+            $controllers[$datatable->getDataController()] = [];
+        }
+        $controllers['symfony/ux-datatablejs/'.$datatable->getConfig()] = ['view' => $datatable->createView()];
+
+        if (class_exists(StimulusControllersDto::class)) {
+            $dto = new StimulusControllersDto($env);
+            foreach ($controllers as $controllerName => $controllerValues) {
+                $dto->addController($controllerName, $controllerValues);
+            }
+
+            return $dto.'';
+        } else {
+            return $this->stimulus->renderStimulusController($env, $controllers).'';
+        }
     }
 }
