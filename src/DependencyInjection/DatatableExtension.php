@@ -33,6 +33,8 @@ class DatatableExtension extends Extension
     {
         $container
             ->setDefinition('datatable.data_process', new Definition(DataProcess::class))
+            ->addArgument(new Reference('twig'))
+            ->addArgument(new Reference('router.default'))
             ->setPublic(false)
         ;
 
@@ -40,7 +42,7 @@ class DatatableExtension extends Extension
             ->setDefinition('datatable.builder', new Definition(ResponseBuilder::class))
             ->addArgument(new Reference('doctrine.orm.default_entity_manager'))
             ->addArgument(new Reference('datatable.data_process'))
-            ->setAutowired(true)
+            //->setAutowired(true)
             ->setPublic(false)
         ;
 
