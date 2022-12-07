@@ -23,9 +23,6 @@ abstract class DataTable implements DataTableInterface
     public static function getDataTableColumns(UrlGeneratorInterface $router){
         return array_map(function ($item) use ($router){
             if(isset($item['rowgroup'])){
-                if($item['rowgroup']=='static' && isset($item['values'])){
-                    $item['values'] = array_flip($item['values']);
-                }
                 if($item['rowgroup']=='api' && isset($item['ajax'])){
                     $item['ajax'] = $router->generate($item['ajax'],$item['params']);
                 }
@@ -53,14 +50,13 @@ abstract class DataTable implements DataTableInterface
 
     public static function selectColumn(string $displayName,array $values,bool $defualtVisibility = true,string $format = null,string $searchFormat = self::SEARCH_FORMAT_STATIC)
     {
-        $data = array(
+        return array(
             'data'=>$displayName,
             'rowgroup' => $searchFormat,
             'values' => $values,
-            'format'=>$format
+            'format'=>$format,
+            'visible'=>$defualtVisibility,
         );
-        if(!$defualtVisibility) { $data['visible'] = false; }
-        return $data;
     }
 
     public static function entityColumn(string $displayName,string $mappedName,string $className,string $entity,string $displayField,string $dataEntityPath = null,bool $defualtVisibility = true,string $format = null,string $searchFormat = self::SEARCH_FORMAT_API)
@@ -73,13 +69,13 @@ abstract class DataTable implements DataTableInterface
                 'class'=>$entity,
                 'displayName'=>$displayField
             ],
-            'format'=>$format
+            'format'=>$format,
+            'visible'=>$defualtVisibility,
         );
         $data['rowgroup'] = $searchFormat;
         if($searchFormat==self::SEARCH_FORMAT_API){
             $data['ajax'] = $dataEntityPath;
         }
-        if(!$defualtVisibility) { $data['visible'] = false; }
         return $data;
     }
 

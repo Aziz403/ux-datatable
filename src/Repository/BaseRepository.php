@@ -48,28 +48,4 @@ class BaseRepository extends ServiceEntityRepository
         return false;
     }
     /* end - get entity associated fields */
-
-
-    /* start -setting condition query */
-    public function getQuery()
-    {
-        $b = $this->createQueryBuilder($this->alias);
-        $b->orderBy($this->alias.'.id', "DESC");
-        return $b;
-    }
-    /* end -setting condition query */
-
-    public function getChoices(string $displayName):array
-    {
-        $choices = [];
-        $b = $this->getQuery();
-        $b->select($this->alias.'.id,'.$this->alias.'.'.$displayName);
-        foreach ($b->getQuery()->getArrayResult() as $item){
-            if($item[$displayName]){
-                $choices[$item['id']] = $item[$displayName];
-            }
-        }
-
-        return array_flip($choices);
-    }
 }

@@ -13,6 +13,7 @@ namespace Symfony\UX\Datatable\Repository;
 
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\UX\Datatable\Entity\DataTableInterface;
@@ -31,6 +32,34 @@ class DatatableRepository extends BaseRepository
     public function __construct(ManagerRegistry $registry,EntityManagerInterface $entityManager,string $entityClass,string $alias)
     {
         parent::__construct($registry,$entityManager, $entityClass,$alias);
+    }
+
+    /* start -setting condition query */
+    public function getQuery(): QueryBuilder
+    {
+        $b = $this->createQueryBuilder($this->alias);
+        $b->orderBy($this->alias.'.id', "DESC");
+        return $b;
+    }
+    /* end -setting condition query */
+
+    public function getChoices(string $displayName):array
+    {
+        $choices = [];
+        $b = $this->getQuery();
+        $b->select($this->alias.'.id,'.$this->alias.'.'.$displayName);
+        foreach ($b->getQuery()->getArrayResult() as $item){
+            if($item[$displayName]){
+                $choices[$item['id']] = $item[$displayName];
+            }
+        }
+
+        return array_flip($choices);
+    }
+
+    public function getCountAll()
+    {
+        return $this->getQuery()->select("COUNT(".$this->alias.".id)")->getQuery()->getScalarResult() ?? 0;
     }
 
     /* start - dataTable base request queries */
