@@ -40,6 +40,7 @@ class DatatableExtension extends Extension
             ->setDefinition('datatable.builder', new Definition(ResponseBuilder::class))
             ->addArgument(new Reference('doctrine.orm.default_entity_manager'))
             ->addArgument(new Reference('datatable.data_process'))
+            ->setAutowired(true)
             ->setPublic(false)
         ;
 
