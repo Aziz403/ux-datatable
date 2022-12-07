@@ -12,7 +12,7 @@
 namespace Symfony\UX\Datatable\Builder;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\UX\Datatable\Repository\DatatableRepository;
@@ -23,12 +23,10 @@ use Symfony\UX\Datatable\Service\DataProcess;
  *
  * @final
  */
-class ResponseBuilder extends AbstractController implements ResponseBuilderInterface
+class ResponseBuilder implements ResponseBuilderInterface
 {
 
-    public function __construct(private EntityManagerInterface $manager,private DataProcess $dataProcess)
-    {
-    }
+    public function __construct(private EntityManagerInterface $manager,private DataProcess $dataProcess) {}
 
     /**
      * @param Request $request
@@ -51,8 +49,8 @@ class ResponseBuilder extends AbstractController implements ResponseBuilderInter
             $data = $this->dataProcess->addActionField($data,$class,$actionsTemplate);
         }
 
-        return $this->json([
-            "recordsTotal" => $repository->count([]),
+        return new JsonResponse([
+            "recordsTotal" => $repository->getCountAll(),
             "recordsFiltered" => $repository->getCountWithRequest($request),
             "draw" => $request->get('draw',1),
             "data" => $data,
@@ -74,7 +72,7 @@ class ResponseBuilder extends AbstractController implements ResponseBuilderInter
             throw new \Exception("ategad exception 3ela 9ebel kola error");
         }
 
-        return $this->json([
+        return new JsonResponse([
             'data' => $repository->getChoices($displayName),
         ]);
     }

@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\UX\Datatable\Builder\ResponseBuilder;
 use Symfony\UX\Datatable\Builder\ResponseBuilderInterface;
+use Symfony\UX\Datatable\Service\DataProcess;
 use Symfony\WebpackEncoreBundle\Twig\StimulusTwigExtension;
 use Twig\Environment;
 
@@ -32,6 +33,8 @@ class DatatableExtension extends Extension
     {
         $container
             ->setDefinition('datatable.builder', new Definition(ResponseBuilder::class))
+            ->addArgument(new Reference('doctrine.orm.default_entity_manager'))
+            ->addArgument(new Reference(DataProcess::class))
             ->setPublic(false)
         ;
 
