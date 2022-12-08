@@ -107,7 +107,7 @@ class DatatableExtension extends AbstractExtension
         if ($datatable->getDataController()) {
             $controllers[$datatable->getDataController()] = [];
         }
-        $controllers['symfony/ux-datatablejs/'.$datatable->getConfig()] = ['view' => $datatable->createView()];
+        $controllers['@symfony/ux-datatablejs/'.$datatable->getConfig()] = ['view' => $datatable->createView()];
 
         if (class_exists(StimulusControllersDto::class)) {
             $dto = new StimulusControllersDto($env);
