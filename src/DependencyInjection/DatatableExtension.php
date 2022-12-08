@@ -11,6 +11,7 @@
 
 namespace Aziz403\UX\Datatable\DependencyInjection;
 
+use Aziz403\UX\Datatable\Twig\DatatableExtension as TwigDatatableExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -53,7 +54,7 @@ class DatatableExtension extends Extension
 
         if (class_exists(Environment::class) && class_exists(StimulusTwigExtension::class)) {
             $container
-                ->setDefinition('datatable.twig_extension', new Definition(\Symfony\UX\Datatable\Twig\DatatableExtension::class))
+                ->setDefinition('datatable.twig_extension', new Definition(TwigDatatableExtension::class))
                 ->addArgument(new Reference('webpack_encore.twig_stimulus_extension'))
                 ->addTag('twig.extension')
                 ->setPublic(false)
