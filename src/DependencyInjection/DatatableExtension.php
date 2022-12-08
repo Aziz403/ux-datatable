@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\UX\Datatable\DependencyInjection;
+namespace Aziz403\UX\Datatable\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\UX\Datatable\Builder\ResponseBuilder;
-use Symfony\UX\Datatable\Builder\ResponseBuilderInterface;
-use Symfony\UX\Datatable\Service\DataProcess;
+use Aziz403\UX\Datatable\Builder\ResponseBuilder;
+use Aziz403\UX\Datatable\Builder\ResponseBuilderInterface;
+use Aziz403\UX\Datatable\Service\DataProcess;
 use Symfony\WebpackEncoreBundle\Twig\StimulusTwigExtension;
 use Twig\Environment;
 

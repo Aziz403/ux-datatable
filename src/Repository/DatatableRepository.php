@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\UX\Datatable\Repository;
+namespace Aziz403\UX\Datatable\Repository;
 
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\UX\Datatable\Entity\DataTableInterface;
+use Aziz403\UX\Datatable\Entity\DataTableInterface;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>

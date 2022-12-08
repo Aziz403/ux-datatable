@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\UX\Datatable\Twig;
+namespace Aziz403\UX\Datatable\Twig;
 
-use Symfony\UX\Datatable\Model\AbstractDatatable;
-use Symfony\UX\Datatable\Model\ComplexDatatable;
+use Aziz403\UX\Datatable\Model\AbstractDatatable;
+use Aziz403\UX\Datatable\Model\ComplexDatatable;
 use Symfony\WebpackEncoreBundle\Dto\StimulusControllersDto;
 use Symfony\WebpackEncoreBundle\Twig\StimulusTwigExtension;
 use Twig\Environment;

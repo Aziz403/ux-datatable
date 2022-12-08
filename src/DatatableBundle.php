@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\UX\Datatable;
+namespace Aziz403\UX\Datatable;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

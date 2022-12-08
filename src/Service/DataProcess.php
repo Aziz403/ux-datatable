@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\UX\Datatable\Service;
+namespace Aziz403\UX\Datatable\Service;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;

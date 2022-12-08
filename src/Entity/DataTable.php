@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\UX\Datatable\Entity;
+namespace Aziz403\UX\Datatable\Entity;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 

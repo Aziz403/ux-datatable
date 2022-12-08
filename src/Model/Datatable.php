@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\UX\Datatable\Model;
+namespace Aziz403\UX\Datatable\Model;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>

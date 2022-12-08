@@ -18,12 +18,12 @@
   ],
   "autoload": {
     "psr-4": {
-      "Symfony\\UX\\Datatable\\": "src/"
+      "Aziz403\\UX\\Datatable\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Symfony\\UX\\Datatable\\Tests\\": "tests/"
+      "Aziz403\\UX\\Datatable\\Tests\\": "tests/"
     }
   },
   "require": {

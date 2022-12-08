@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\UX\Datatable\Builder;
+namespace Aziz403\UX\Datatable\Builder;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\UX\Datatable\Repository\DatatableRepository;
-use Symfony\UX\Datatable\Service\DataProcess;
+use Aziz403\UX\Datatable\Repository\DatatableRepository;
+use Aziz403\UX\Datatable\Service\DataProcess;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
