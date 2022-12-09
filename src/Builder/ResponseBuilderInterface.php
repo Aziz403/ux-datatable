@@ -23,7 +23,7 @@ interface ResponseBuilderInterface
 {
     const DEFAULT_TEMPLATE_PATH = "{entity}/_actions.html.twig";
 
-    public function datatable(Request $request, string $class,string $actionsTemplate = self::DEFAULT_TEMPLATE_PATH): Response;
+    public function datatable(Request $request, string $class,?string $actionsTemplate = self::DEFAULT_TEMPLATE_PATH): Response;
 
     public function choices(string $class, string $displayName): Response;
 }
