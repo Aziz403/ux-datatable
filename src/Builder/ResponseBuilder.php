@@ -34,7 +34,7 @@ class ResponseBuilder implements ResponseBuilderInterface
      * @return Response
      * @throws \Exception
      */
-    public function datatable(Request $request, string $class,string $actionsTemplate = self::DEFAULT_TEMPLATE_PATH): Response
+    public function datatable(Request $request, string $class,?string $actionsTemplate = self::DEFAULT_TEMPLATE_PATH): Response
     {
         $repository = $this->manager->getRepository($class);
         if(!$repository){ return new Response(null,404); }
