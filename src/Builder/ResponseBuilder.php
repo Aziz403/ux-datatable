@@ -34,7 +34,7 @@ class ResponseBuilder implements ResponseBuilderInterface
      * @return Response
      * @throws \Exception
      */
-    public function datatable(Request $request, string $class,string $actionsTemplate = null): Response
+    public function datatable(Request $request, string $class,string $actionsTemplate = self::DEFAULT_TEMPLATE_PATH): Response
     {
         $repository = $this->manager->getRepository($class);
         if(!$repository){ return new Response(null,404); }
@@ -45,7 +45,7 @@ class ResponseBuilder implements ResponseBuilderInterface
 
         $data = $repository->getDataWithRequest($request);
 
-        if(!$request->get('withoutActionField')){
+        if($actionsTemplate){
             $data = $this->dataProcess->addActionField($data,$class,$actionsTemplate);
         }
 

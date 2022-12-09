@@ -1,6 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 const $ = require('jquery');
-import DataTable from "datatables.net";
+import DataTables from "datatables.net";
 
 import "datatables.net-bs4/js/dataTables.bootstrap4";
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
@@ -37,15 +37,15 @@ export default class extends Controller {
 
         this._dispatchEvent('datatable:pre-connect', { options , datatableId });
 
-        if(DataTable.isDataTable(datatableId)){
-            this.table = new DataTable(datatableId);
+        if(DataTables.isDataTable(datatableId)){
+            this.table = new DataTables(datatableId);
         }
         else{
             let btnsConfig = ButtonsHelper.getBtnsConfig();
             // nezido search f columns
             ColumnsSearch.addSearchInColumn(datatableId)
             //configuration d table
-            this.table = new DataTable(datatableId, {
+            this.table = new DataTables(datatableId, {
                 dom: "<'d-flex justify-content-between'Bl>t<'d-flex justify-content-between'ip>r",//position d dok plugins (buttons,search input,paginator..) f dom
                 processing: true,//progress spinner
                 serverSide: true,//requetes d search aykono f parti d server
@@ -83,6 +83,7 @@ export default class extends Controller {
 
     toggleSearchColumnsVisibility(){
         let datatableId = "#"+this.element.id;
+
         $(datatableId+' thead tr').eq(0).toggleClass('d-none');
         const toggleBtn = $(datatableId+' thead tr').eq(1).find('button i');
         if(toggleBtn.hasClass('fa-eye')){
@@ -93,6 +94,8 @@ export default class extends Controller {
             toggleBtn.removeClass('fa-eye-slash')
             toggleBtn.addClass('fa-eye')
         }
+
+        this._dispatchEvent('datatable:toggle-search', { tableId: datatableId });
     }
 
     _dispatchEvent(name, payload) {

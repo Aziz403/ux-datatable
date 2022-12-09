@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import DataTable from "datatables.net"
+import DataTables from "datatables.net"
 
 export default class extends Controller {
     static values = {
@@ -15,7 +15,7 @@ export default class extends Controller {
 
         this._dispatchEvent('datatable:pre-connect', { options });
 
-        this.table = new DataTable(this.element, options);
+        this.table = new DataTables(this.element, options);
 
         this._dispatchEvent('datatable:connect', { table: this.table, options });
     }

@@ -6,7 +6,7 @@ export default class ColumnsSearch {
     static controllerInstance;
 
     static addSearchInColumn(dataTableId){
-        const columns = ColumnsSearch.controllerInstance.dataColumnsValue;
+        const { columns } = ColumnsSearch.controllerInstance.viewValue;
         //ila kna deja kaynin inputs d search(idan rah jay men cache ayeb9aw)
         if($(`${dataTableId} thead th.filtre input`).length){return;}
         const searchInput = (col)=>{

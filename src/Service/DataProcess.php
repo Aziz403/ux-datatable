@@ -11,6 +11,7 @@
 
 namespace Aziz403\UX\Datatable\Service;
 
+use Aziz403\UX\Datatable\Builder\ResponseBuilderInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
@@ -39,12 +40,15 @@ class DataProcess
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function addActionField(array $data, string $class, string $template = null)
+    public function addActionField(array $data, string $class, string $template)
     {
         $entityName = $this->getEntityNameFromClassName($class);
         $entityName = $this->getEntityNameFromUpper($entityName);
-        if(!$template)
-        { $template = $entityName.'/_actions.html.twig'; }
+
+        if($template==ResponseBuilderInterface::DEFAULT_TEMPLATE_PATH)
+        {
+            $template = str_replace('{entity}',$entityName,$template);
+        }
 
         $process = [];
         foreach ($data as $item) {

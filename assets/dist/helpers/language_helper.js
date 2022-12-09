@@ -495,7 +495,12 @@ export default class LanguageHelper{
     };
 
     static getLanguage(lang){
-        console.log(lang,LanguageHelper.FR);
-        return lang==="FR" ? LanguageHelper.FR:LanguageHelper.AR
+        switch (lang)
+        {
+            case 'FR':
+                return LanguageHelper.FR;
+            case 'AR':
+                return LanguageHelper.AR;
+        }
     }
 }

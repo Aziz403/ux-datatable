@@ -21,7 +21,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 interface ResponseBuilderInterface
 {
-    public function datatable(Request $request, string $class,string $actionsTemplate = null): Response;
+    const DEFAULT_TEMPLATE_PATH = "{entity}/_actions.html.twig";
+
+    public function datatable(Request $request, string $class,string $actionsTemplate = self::DEFAULT_TEMPLATE_PATH): Response;
 
     public function choices(string $class, string $displayName): Response;
 }

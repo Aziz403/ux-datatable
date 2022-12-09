@@ -46,21 +46,8 @@ class DatatableExtension extends AbstractExtension
         $datatable->setAttributes(array_merge($datatable->getAttributes(), $attributes));
 
         $controllers = [];
-        if ($datatable->getDataController()) {
-            $controllers[$datatable->getDataController()] = [];
-        }
-        $controllers['@aziz403/ux-datatablejs/'.$datatable->getConfig()] = ['view' => $datatable->createView()];
-
-        if (class_exists(StimulusControllersDto::class)) {
-            $dto = new StimulusControllersDto($env);
-            foreach ($controllers as $controllerName => $controllerValues) {
-                $dto->addController($controllerName, $controllerValues);
-            }
-
-            $html = '<table '.$dto.' ';
-        } else {
-            $html = '<table '.$this->stimulus->renderStimulusController($env, $controllers).' ';
-        }
+        $html = "<table ";
+        $html .= $this->renderController($env,$datatable,$controllers);
 
         foreach ($datatable->getAttributes() as $name => $value) {
             if ('data-controller' === $name) {
@@ -82,7 +69,7 @@ class DatatableExtension extends AbstractExtension
             $trHead = '<tr>';
             foreach ($datatable->getColumns() as $column){
                 $trSerach .= '<th class="filter">'.$column['data'].'</th>';
-                $trHead .= '<th data-tr-name="'.$column['data'].'">'.$column['data'];
+                $trHead .= '<th data-tr-name="'.$column['data'].'">';
                 if($column['data']=='action'){
                     $trHead .= '<button '.$this->stimulus->renderStimulusAction($env, $controllers,'toggleSearchColumnsVisibility').'><i class="fas fa-eye"></i></button>';
                 }
@@ -101,13 +88,12 @@ class DatatableExtension extends AbstractExtension
         return trim($html).'</table>';
     }
 
-    public function renderController(Environment $env, AbstractDatatable $datatable)
+    public function renderController(Environment $env, AbstractDatatable $datatable,array &$controllers = [])
     {
-        $controllers = [];
         if ($datatable->getDataController()) {
             $controllers[$datatable->getDataController()] = [];
         }
-        $controllers['@symfony/ux-datatablejs/'.$datatable->getConfig()] = ['view' => $datatable->createView()];
+        $controllers['@aziz403/ux-datatablejs/'.$datatable->getConfig()] = ['view' => $datatable->createView()];
 
         if (class_exists(StimulusControllersDto::class)) {
             $dto = new StimulusControllersDto($env);
