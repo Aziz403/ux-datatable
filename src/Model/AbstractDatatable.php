@@ -30,9 +30,9 @@ abstract class AbstractDatatable
     protected array $options = [];
     protected array $attributes = [];
 
-    public function __construct(string $config)
+    public function __construct(string $config,string $tableId)
     {
-        $this->attributes['id'] = 'table-'.random_int(10,99);
+        $this->attributes['id'] = $tableId;
         $this->config = $config;
     }
 

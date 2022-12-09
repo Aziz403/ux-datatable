@@ -22,9 +22,9 @@ class ComplexDatatable extends AbstractDatatable
     private string $locale;
     private array $columns;
 
-    public function __construct(string $path,array $columns,string $locale = self::LOCALE_FROM_SESSION)
+    public function __construct(string $tableId,string $path,array $columns,string $locale = self::LOCALE_FROM_SESSION)
     {
-        parent::__construct(self::COMPLEX_DATATABLE_CONFIG);
+        parent::__construct(self::COMPLEX_DATATABLE_CONFIG,$tableId);
         $this->path = $path;
         $this->columns = $columns;
         $this->locale = $locale;
