@@ -34,7 +34,7 @@ class ExportExcelService{
 
     public function generateTable(Worksheet $sheet,string $entityClass,array $dataTable,array $visibleRows,int &$y = 1,int &$x = 1):Worksheet
     {
-        $entityClass = $this->dataProcess->getEntityNameFromLower($entityClass);
+        //$entityClass = $this->dataProcess->getEntityNameFromLower($entityClass);
         $initX = $x;
         $this->generateTableHeader($sheet,$visibleRows,$y,$x);
         $x = $initX;// nereje3o x l init dyalha bax tebda men lwl 3awtani
@@ -62,7 +62,7 @@ class ExportExcelService{
             $keys = array_keys($row);
             foreach ($keys as $key) {
                 if($cells[$key]=="true"){
-                    $column = call_user_func_array(array('App\\Entity\\'.$entityClass, 'getDataTableColumn'), array($key));
+                    $column = call_user_func_array(array($entityClass, 'getDataTableColumn'), array($key));
                     if(isset($column['format']))
                     {//hena ila kant 3endo xi format aneteb9oha
                         switch ($column['format'])

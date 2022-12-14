@@ -79,6 +79,11 @@ abstract class AbstractDatatable
         return $this->attributes['data-controller'] ?? null;
     }
 
+    public function setDataController(string $controllerName)
+    {
+        $this->attributes['data-controller'] = $controllerName;
+    }
+
     /**
      * @return string
      */
