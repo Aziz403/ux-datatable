@@ -19,6 +19,7 @@ namespace Aziz403\UX\Datatable\Model;
 class ComplexDatatable extends AbstractDatatable
 {
     private string $path;
+    private ?string $pathExcel;
     private string $locale;
     private array $columns;
 
@@ -28,7 +29,6 @@ class ComplexDatatable extends AbstractDatatable
         $this->path = $path;
         $this->columns = $columns;
         $this->locale = $locale;
-
     }
 
     public function createView(): array
@@ -38,6 +38,7 @@ class ComplexDatatable extends AbstractDatatable
             'columns' => $this->columns,
             'locale' => $this->locale,
             'options' => $this->options,
+            'pathExcel' => $this->pathExcel ?? ''
         ];
     }
 
@@ -79,5 +80,21 @@ class ComplexDatatable extends AbstractDatatable
     public function setColumns(array $columns): void
     {
         $this->columns = $columns;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPathExcel(): ?string
+    {
+        return $this->pathExcel;
+    }
+
+    /**
+     * @param string|null $pathExcel
+     */
+    public function setPathExcel(?string $pathExcel): void
+    {
+        $this->pathExcel = $pathExcel;
     }
 }

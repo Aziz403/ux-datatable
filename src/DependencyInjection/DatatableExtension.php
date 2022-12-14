@@ -11,6 +11,7 @@
 
 namespace Aziz403\UX\Datatable\DependencyInjection;
 
+use Aziz403\UX\Datatable\Service\ExportExcelService;
 use Aziz403\UX\Datatable\Twig\DatatableExtension as TwigDatatableExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -40,9 +41,16 @@ class DatatableExtension extends Extension
         ;
 
         $container
+            ->setDefinition('datatable.export_excel', new Definition(ExportExcelService::class))
+            ->addArgument(new Reference('datatable.data_process'))
+            ->setPublic(false)
+        ;
+
+        $container
             ->setDefinition('datatable.builder', new Definition(ResponseBuilder::class))
             ->addArgument(new Reference('doctrine.orm.default_entity_manager'))
             ->addArgument(new Reference('datatable.data_process'))
+            ->addArgument(new Reference('datatable.export_excel'))
             //->setAutowired(true)
             ->setPublic(false)
         ;

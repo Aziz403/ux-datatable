@@ -2,42 +2,18 @@
 export default class ButtonsHelper {
     static controllerInstance;
 
-    static getBtnsConfig(){
+    static getBtnsConfig(pathExcel){
         let btnsConfig = {
             buttons: [
                 { extend:'colvis',className:'btn btn-sm btn-default' }
             ]
         };
-        if (ButtonsHelper.controllerInstance.exportExcellPathValue || ButtonsHelper.controllerInstance.exportBonPathValue || ButtonsHelper.controllerInstance.exportPdfPathValue)
+        if (pathExcel!=='')
         {
             //nezido dropdown
             btnsConfig.buttons.push({ text:'Export',extend: 'collection', className:'btn btn-sm bg-purple' ,buttons:[],});
             //nezido items d dropdown
-            if(ButtonsHelper.controllerInstance.exportPdfPathValue){
-                btnsConfig.buttons[1].buttons.push({
-                    text:'PDF',
-                    action:function () {
-                        let params = ButtonsHelper.controllerInstance.table.ajax.params();
-                        let visibleCols = {};
-                        ButtonsHelper.controllerInstance.table.context[0].aoColumns.forEach(col=> visibleCols[`${col.data}`] = Boolean(col.bVisible));
-                        let data = {'columns':params.columns,'order':params.order,'visibility':visibleCols};
-                        window.open(ButtonsHelper.controllerInstance.exportPdfPathValue+"?"+ButtonsHelper.serialize(data));
-                    }
-                });
-            }
-            if(ButtonsHelper.controllerInstance.exportBonPathValue){
-                btnsConfig.buttons[1].buttons.push({
-                    text:'BON',
-                    action:function () {
-                        let params = ButtonsHelper.controllerInstance.table.ajax.params();
-                        let visibleCols = {};
-                        ButtonsHelper.controllerInstance.table.context[0].aoColumns.forEach(col=> visibleCols[`${col.data}`] = Boolean(col.bVisible));
-                        let data = {'columns':params.columns,'order':params.order,'visibility':visibleCols};
-                        window.open(ButtonsHelper.controllerInstance.exportBonPathValue+"?"+ButtonsHelper.serialize(data));
-                    }
-                });
-            }
-            if(ButtonsHelper.controllerInstance.exportExcellPathValue) {
+            if(pathExcel!=='') {
                 btnsConfig.buttons[1].buttons.push({
                     text: 'Excel',
                     action: function () {
@@ -45,7 +21,7 @@ export default class ButtonsHelper {
                         let visibleCols = {};
                         ButtonsHelper.controllerInstance.table.context[0].aoColumns.forEach(col=> visibleCols[`${col.data}`] = Boolean(col.bVisible));
                         let data = {'columns':params.columns,'order':params.order,'visibility':visibleCols};
-                        window.open(ButtonsHelper.controllerInstance.exportExcellPathValue+"?"+ButtonsHelper.serialize(data));
+                        window.open(pathExcel+"?"+ButtonsHelper.serialize(data));
                     }
                 });
             }

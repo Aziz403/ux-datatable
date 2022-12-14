@@ -23,7 +23,7 @@ export default class extends Controller {
         ColumnsSearch.controllerInstance = this;
         ButtonsHelper.controllerInstance = this;
 
-        const { path, columns, locale, options } = this.viewValue;
+        const { path, columns, locale, pathExcel, options } = this.viewValue;
         let datatableId = '#'+this.element.id;
 
         this._dispatchEvent('datatable:pre-connect', { options , datatableId });
@@ -32,7 +32,7 @@ export default class extends Controller {
             this.table = new DataTables(datatableId);
         }
         else{
-            let btnsConfig = ButtonsHelper.getBtnsConfig();
+            let btnsConfig = ButtonsHelper.getBtnsConfig(pathExcel);
             // nezido search f columns
             ColumnsSearch.addSearchInColumn(datatableId)
             //configuration d table
