@@ -4,7 +4,6 @@ namespace Aziz403\UX\Datatable\Columns;
 
 class TwigColumn extends AbstractColumn
 {
-    private string $data;
     private string $template;
 
     public function __construct(string $field,string $template,string $display = null, $visible = true,bool $orderable = true)

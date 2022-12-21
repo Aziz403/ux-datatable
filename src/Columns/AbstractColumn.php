@@ -6,6 +6,7 @@ use Twig\Environment;
 
 abstract class AbstractColumn
 {
+    protected string $data;
     protected string $text;
     protected bool $visible;
     protected bool $orderable;
@@ -18,5 +19,13 @@ abstract class AbstractColumn
     public function getText(): string
     {
         return $this->text;
+    }
+
+    /**
+     * @return string
+     */
+    public function getData(): string
+    {
+        return $this->data;
     }
 }

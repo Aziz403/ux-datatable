@@ -9,9 +9,10 @@ class EntityColumn extends AbstractColumn
 
     public function __construct(string $entity,string $field,string $display = null,bool $visible = true,bool $orderable = true)
     {
+        $this->data = $entity.'.'.$field;
         $this->entity = $entity;
         $this->field = $field;
-        $this->text = $display ?? $field;
+        $this->text = $display ?? $this->data;
         $this->visible = $visible;
         $this->orderable = $orderable;
     }
@@ -19,8 +20,7 @@ class EntityColumn extends AbstractColumn
     public function build()
     {
         return [
-            'data' => $this->entity,
-            'template' => $this->field,
+            'data' => $this->data,
             'text' => $this->text,
             'visible' => $this->visible,
             'orderable' => $this->orderable

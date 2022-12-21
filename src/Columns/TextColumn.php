@@ -4,7 +4,6 @@ namespace Aziz403\UX\Datatable\Columns;
 
 class TextColumn extends AbstractColumn
 {
-    private string $data;
 
     public function __construct(string $field,?string $display = null,bool $visible = true,bool $orderable = true)
     {

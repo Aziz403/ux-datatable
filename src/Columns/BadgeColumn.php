@@ -11,7 +11,6 @@ class BadgeColumn extends AbstractColumn
     const COLOR_INFO = 'info';
     const COLOR_DANGER = 'danger';
 
-    private string $data;
     private string $condition;
     private string $color;
 
