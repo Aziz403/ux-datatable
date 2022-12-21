@@ -18,23 +18,12 @@ namespace Aziz403\UX\Datatable\Model;
  */
 abstract class AbstractDatatable
 {
-    const SIMPLE_DATATABLE_CONFIG = "simple-datatable";
-    const COMPLEX_DATATABLE_CONFIG = "complex-datatable";
-
-    const LOCALE_FROM_SESSION = "LOCALE_FROM_SESSION";
     const LOCALE_EN = "EN";
     const LOCALE_FR = "FR";
     const LOCALE_AR = "AR";
 
-    protected string $config;
     protected array $options = [];
     protected array $attributes = [];
-
-    public function __construct(string $config,string $tableId)
-    {
-        $this->attributes['id'] = $tableId;
-        $this->config = $config;
-    }
 
     /**
      * @return array
@@ -82,14 +71,6 @@ abstract class AbstractDatatable
     public function setDataController(string $controllerName)
     {
         $this->attributes['data-controller'] = $controllerName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getConfig(): string
-    {
-        return $this->config;
     }
 
 }

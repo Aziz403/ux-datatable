@@ -18,11 +18,6 @@ namespace Aziz403\UX\Datatable\Model;
  */
 class Datatable extends AbstractDatatable
 {
-    public function __construct(string $tableId)
-    {
-        parent::__construct(self::SIMPLE_DATATABLE_CONFIG,$tableId);
-    }
-
     public function createView(): array
     {
         return [
