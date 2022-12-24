@@ -28,4 +28,9 @@ abstract class AbstractColumn
     {
         return $this->data;
     }
+
+    public function __toString()
+    {
+        return $this->data;
+    }
 }

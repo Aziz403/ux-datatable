@@ -76,7 +76,7 @@ class DatatableExtension extends AbstractExtension
 
         $html .= '<thead><tr>';
         foreach ($datatable->getColumns() as $column){
-            $html .= '<th data-tr-name="'.$column->getText().'">'.$column->getText().'</th>';
+            $html .= '<th data-column-name="'.$column->getText().'">'.$column->getText().'</th>';
         }
         $html .= '</tr></thead>';
 

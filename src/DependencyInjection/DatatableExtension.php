@@ -32,33 +32,20 @@ class DatatableExtension extends Extension
 
     public function load(array $configs, ContainerBuilder $container)
     {
-        $container
-            ->setDefinition('datatable.export_excel', new Definition(ExportExcelService::class))
-            ->addArgument(new Reference('datatable.data_process'))
-            ->setPublic(false)
-        ;
-
-        $container
-            ->setDefinition('datatable.builder', new Definition(DatatableBuilder::class))
-            ->addArgument(new Reference('doctrine.orm.default_entity_manager'))
-            ->addArgument(new Reference('datatable.data_process'))
-            ->addArgument(new Reference('datatable.export_excel'))
-            //->setAutowired(true)
-            ->setPublic(false)
-        ;
-
-        $container
-            ->setAlias(DatatableBuilderInterface::class, 'datatable.builder')
-            ->setPublic(false)
-        ;
+        if(class_exists(Environment::class)) {
+            $container
+                ->setDefinition('datatable.builder', new Definition(DatatableBuilder::class))
+                ->addArgument(new Reference('doctrine.orm.default_entity_manager'))
+                ->addArgument(new Reference('@twig'));
+            $container
+                ->setAlias(DatatableBuilderInterface::class, 'datatable.builder');
+        }
 
         if (class_exists(Environment::class) && class_exists(StimulusTwigExtension::class)) {
             $container
                 ->setDefinition('datatable.twig_extension', new Definition(TwigDatatableExtension::class))
                 ->addArgument(new Reference('webpack_encore.twig_stimulus_extension'))
-                ->addTag('twig.extension')
-                ->setPublic(false)
-            ;
+                ->addTag('twig.extension');
         }
     }
 }
