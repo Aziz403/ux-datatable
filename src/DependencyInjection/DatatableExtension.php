@@ -11,15 +11,14 @@
 
 namespace Aziz403\UX\Datatable\DependencyInjection;
 
-use Aziz403\UX\Datatable\Service\ExportExcelService;
+use Aziz403\UX\Datatable\Helper\ExportExcelService;
 use Aziz403\UX\Datatable\Twig\DatatableExtension as TwigDatatableExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Aziz403\UX\Datatable\Builder\ResponseBuilder;
-use Aziz403\UX\Datatable\Builder\ResponseBuilderInterface;
-use Aziz403\UX\Datatable\Service\DataProcess;
+use Aziz403\UX\Datatable\Builder\DatatableBuilder;
+use Aziz403\UX\Datatable\Builder\DatatableBuilderInterface;
 use Symfony\WebpackEncoreBundle\Twig\StimulusTwigExtension;
 use Twig\Environment;
 
@@ -34,20 +33,13 @@ class DatatableExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $container
-            ->setDefinition('datatable.data_process', new Definition(DataProcess::class))
-            ->addArgument(new Reference('twig'))
-            ->addArgument(new Reference('router.default'))
-            ->setPublic(false)
-        ;
-
-        $container
             ->setDefinition('datatable.export_excel', new Definition(ExportExcelService::class))
             ->addArgument(new Reference('datatable.data_process'))
             ->setPublic(false)
         ;
 
         $container
-            ->setDefinition('datatable.builder', new Definition(ResponseBuilder::class))
+            ->setDefinition('datatable.builder', new Definition(DatatableBuilder::class))
             ->addArgument(new Reference('doctrine.orm.default_entity_manager'))
             ->addArgument(new Reference('datatable.data_process'))
             ->addArgument(new Reference('datatable.export_excel'))
@@ -56,7 +48,7 @@ class DatatableExtension extends Extension
         ;
 
         $container
-            ->setAlias(ResponseBuilderInterface::class, 'datatable.builder')
+            ->setAlias(DatatableBuilderInterface::class, 'datatable.builder')
             ->setPublic(false)
         ;
 

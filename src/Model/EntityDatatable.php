@@ -2,32 +2,44 @@
 
 namespace Aziz403\UX\Datatable\Model;
 
-use Aziz403\UX\Datatable\Columns\AbstractColumn;
-use Aziz403\UX\Datatable\Columns\TwigColumn;
+use Aziz403\UX\Datatable\Column\AbstractColumn;
+use Aziz403\UX\Datatable\Repository\DatatableRepository;
+use Aziz403\UX\Datatable\Helper\DatatableQueriesHelper;
+use Aziz403\UX\Datatable\Helper\DatatableTemplatingHelper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 class EntityDatatable extends AbstractDatatable
 {
-    private string $entityName;
+    private string $className;
     private string $path;
     private array $columns;
-    private ?Criteria $criteria;
 
-    public function __construct(string $entityName,string $path)
+    private Request $request;
+
+    private DatatableQueriesHelper $queriesService;
+    private DatatableTemplatingHelper $templatingService;
+
+    public function __construct(string $className,EntityRepository $repository,Environment $environment)
     {
-        $this->entityName = $entityName;
-        $this->path = $path;
+        $this->className = $className;
         $this->columns = [];
+        $this->queriesService = new DatatableQueriesHelper($repository,$this);
+        $this->templatingService = new DatatableTemplatingHelper($environment,$this);
     }
 
     /**
      * @return string
      */
-    public function getPath(): string
+    public function getClassName(): string
     {
-        return $this->path;
+        return $this->className;
     }
 
     /**
@@ -39,7 +51,22 @@ class EntityDatatable extends AbstractDatatable
     }
 
     /**
+     * @return AbstractColumn|null
+     */
+    public function getColumn(string $data): ?AbstractColumn
+    {
+        $res = array_filter($this->columns,function (AbstractColumn $column) use($data){
+            return $column->getData()===$data;
+        });
+        if(count($res)==0){
+            return null;
+        }
+        return reset($res);
+    }
+
+    /**
      * @param AbstractColumn[] $columns
+     * @return EntityDatatable
      */
     public function setColumns(array $columns): self
     {
@@ -49,71 +76,83 @@ class EntityDatatable extends AbstractDatatable
     }
 
     /**
-     * @return Criteria|null
+     * @param AbstractColumn[] $columns
+     * @return EntityDatatable
      */
-    public function getCriteria(): ?Criteria
+    public function addColumns(array $columns): self
     {
-        return $this->criteria;
-    }
-
-    /**
-     * @param Criteria|null $criteria
-     */
-    public function setCriteria(?Criteria $criteria): self
-    {
-        $this->criteria = $criteria;
+        $this->columns = array_merge($this->columns,$columns);
 
         return $this;
     }
 
     /**
-     * @return string
+     * @param AbstractColumn $column
+     * @return EntityDatatable
      */
-    public function getEntityName(): string
+    public function addColumn(AbstractColumn $column): self
     {
-        return $this->entityName;
+        $this->columns[] = $column;
+
+        return $this;
+    }
+
+    public function isSubmitted():bool
+    {
+        $draw = $this->request->get('draw');
+        $orders = $this->request->get('orders');
+        $columns = $this->request->get('columns');
+        $start = $this->request->get('start');
+        $length = $this->request->get('length');
+        return $draw && $orders && $columns & $start && $length;
     }
 
     public function createView(): array
     {
         return [
-            'path' => $this->path,
-            'columns' => $this->buildView(),
-            'options' => $this->options
+            "path" => $this->path,
+            "options" => $this->options,
         ];
     }
 
-    private function buildCriteria(Request $request) :Criteria
+    public function handleRequest(Request $request): self
     {
-        $criteria = new Criteria();
+        $this->request = $request;
+        $this->path = $request->getPathInfo();
 
-
-
-        return $criteria;
+        return $this;
     }
 
-    public function buildView()
+    /**
+     * @return JsonResponse
+     */
+    public function getResponse(): JsonResponse
     {
-        return array_map(function (AbstractColumn $column){
-            return $column->build();
-        },$this->columns);
-    }
-
-    public function buildData(ServiceEntityRepository $repository,Request $request)
-    {
-        $q = $repository->createQueryBuilder($this->entityName);
-
-        if($this->criteria){
-            $q->addCriteria($this->criteria);
+        //check if request handled
+        if($this->request){
+            throw new \Exception(Request::class." Not Found,Maybe you forget send Request in EntityDatatable::handleRequest method");
         }
 
-        $data = $q->addCriteria($this->buildCriteria($request));
-
-        return [
-            "recordsTotal" => $countAll,
-            "recordsFiltered" => $countWithFilter,
-            "draw" => $request->get('draw',1),
-            "data" => $data,
+        $query = [
+            'columns' => $this->request->get('columns'),
+            'orders' => $this->request->get('orders'),
+            'start' => $this->request->get('start'),
+            'length' => $this->request->get('length')
         ];
+        //create query
+        $records = $this->queriesService->findRecords($query);
+        $recordsTotal = $this->queriesService->countRecords();
+        $recordsFiltered = $this->queriesService->countRecords($query);
+
+        //trait data by environment
+        $data = $this->templatingService->renderData($records);
+
+        //save data to later usage
+        return new JsonResponse([
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            "data" => $data,
+            "draw" => $this->request->get('draw',1)
+        ]);
     }
 }
