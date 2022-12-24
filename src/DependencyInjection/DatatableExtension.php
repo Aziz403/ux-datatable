@@ -11,7 +11,6 @@
 
 namespace Aziz403\UX\Datatable\DependencyInjection;
 
-use Aziz403\UX\Datatable\Helper\ExportExcelService;
 use Aziz403\UX\Datatable\Twig\DatatableExtension as TwigDatatableExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -24,8 +23,6 @@ use Twig\Environment;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
- *
- * @final
  */
 class DatatableExtension extends Extension
 {
@@ -36,7 +33,7 @@ class DatatableExtension extends Extension
             $container
                 ->setDefinition('datatable.builder', new Definition(DatatableBuilder::class))
                 ->addArgument(new Reference('doctrine.orm.default_entity_manager'))
-                ->addArgument(new Reference('@twig'));
+                ->addArgument(new Reference('twig'));
             $container
                 ->setAlias(DatatableBuilderInterface::class, 'datatable.builder');
         }

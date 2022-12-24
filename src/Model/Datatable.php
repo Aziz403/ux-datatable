@@ -13,8 +13,6 @@ namespace Aziz403\UX\Datatable\Model;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
- *
- * @final
  */
 class Datatable extends AbstractDatatable
 {

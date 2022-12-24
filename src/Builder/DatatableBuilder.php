@@ -17,8 +17,6 @@ use Twig\Environment;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
- *
- * @final
  */
 class DatatableBuilder implements DatatableBuilderInterface
 {

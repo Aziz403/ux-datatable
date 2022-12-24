@@ -1,27 +1,41 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Aziz Benmallouk <azizbenmallouk4@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Aziz403\UX\Datatable\Model;
 
 use Aziz403\UX\Datatable\Column\AbstractColumn;
-use Aziz403\UX\Datatable\Repository\DatatableRepository;
 use Aziz403\UX\Datatable\Helper\DatatableQueriesHelper;
 use Aziz403\UX\Datatable\Helper\DatatableTemplatingHelper;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
+/**
+ * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
+ */
 class EntityDatatable extends AbstractDatatable
 {
+    const DEFAULT_DATATABLE_OPTIONS = [
+        'dom' => "<Bl>t<ip>r",
+        'processing' => true,
+        'serverSide' => true,
+        'order' => [[0, 'desc']]
+    ];
+
     private string $className;
-    private string $path;
+    private ?string $path;
     private array $columns;
 
-    private Request $request;
+    private ?Request $request;
 
     private DatatableQueriesHelper $queriesService;
     private DatatableTemplatingHelper $templatingService;
@@ -32,6 +46,7 @@ class EntityDatatable extends AbstractDatatable
         $this->columns = [];
         $this->queriesService = new DatatableQueriesHelper($repository,$this);
         $this->templatingService = new DatatableTemplatingHelper($environment,$this);
+        $this->options = self::DEFAULT_DATATABLE_OPTIONS;
     }
 
     /**
@@ -51,6 +66,7 @@ class EntityDatatable extends AbstractDatatable
     }
 
     /**
+     * @param string $data
      * @return AbstractColumn|null
      */
     public function getColumn(string $data): ?AbstractColumn
@@ -97,6 +113,9 @@ class EntityDatatable extends AbstractDatatable
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function isSubmitted():bool
     {
         $draw = $this->request->get('draw');
@@ -107,18 +126,26 @@ class EntityDatatable extends AbstractDatatable
         return $draw && $orders && $columns & $start && $length;
     }
 
+    /**
+     * @return array
+     */
     public function createView(): array
     {
         return [
-            "path" => $this->path,
+            "path" => $this->path ?? 'null',
             "options" => $this->options,
         ];
     }
 
+    /**
+     * @param Request $request
+     * @return $this
+     */
     public function handleRequest(Request $request): self
     {
         $this->request = $request;
         $this->path = $request->getPathInfo();
+        $this->options['ajax'] = $this->path;
 
         return $this;
     }
@@ -146,6 +173,9 @@ class EntityDatatable extends AbstractDatatable
 
         //trait data by environment
         $data = $this->templatingService->renderData($records);
+
+        //clear request
+        $this->request = null;
 
         //save data to later usage
         return new JsonResponse([

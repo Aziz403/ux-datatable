@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Aziz Benmallouk <azizbenmallouk4@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Aziz403\UX\Datatable\Helper;
 
 use Aziz403\UX\Datatable\Column\EntityColumn;
@@ -8,6 +17,9 @@ use Aziz403\UX\Datatable\Model\EntityDatatable;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
+/**
+ * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
+ */
 class DatatableQueriesHelper
 {
     private EntityRepository $repository;

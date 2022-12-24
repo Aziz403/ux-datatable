@@ -15,8 +15,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
- *
- * @final
  */
 class DatatableBundle extends Bundle
 {

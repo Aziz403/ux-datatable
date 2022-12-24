@@ -13,15 +13,9 @@ namespace Aziz403\UX\Datatable\Model;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
- *
- * @final
  */
 abstract class AbstractDatatable
 {
-    const LOCALE_EN = "EN";
-    const LOCALE_FR = "FR";
-    const LOCALE_AR = "AR";
-
     protected array $options = [];
     protected array $attributes = [];
 
@@ -35,6 +29,7 @@ abstract class AbstractDatatable
 
     /**
      * @param array $options
+     * @return $this
      */
     public function setOptions(array $options): self
     {
@@ -53,6 +48,7 @@ abstract class AbstractDatatable
 
     /**
      * @param array $attributes
+     * @return $this
      */
     public function setAttributes(array $attributes): self
     {
@@ -61,16 +57,26 @@ abstract class AbstractDatatable
         return $this;
     }
 
-    public abstract function createView(): array;
-
+    /**
+     * @return string|null
+     */
     public function getDataController(): ?string
     {
         return $this->attributes['data-controller'] ?? null;
     }
 
+    /**
+     * @param string $controllerName
+     * @return void
+     */
     public function setDataController(string $controllerName)
     {
         $this->attributes['data-controller'] = $controllerName;
     }
+
+    /**
+     * @return array
+     */
+    public abstract function createView(): array;
 
 }

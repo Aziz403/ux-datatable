@@ -12,16 +12,9 @@
 namespace Aziz403\UX\Datatable\Builder;
 
 use Aziz403\UX\Datatable\Model\EntityDatatable;
-use Aziz403\UX\Datatable\Helper\DataProcess;
-use Aziz403\UX\Datatable\Helper\ExportExcelService;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
- *
- * @final
  */
 interface DatatableBuilderInterface
 {
