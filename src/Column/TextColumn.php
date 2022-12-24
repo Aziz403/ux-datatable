@@ -1,6 +1,6 @@
 <?php
 
-namespace Aziz403\UX\Datatable\Columns;
+namespace Aziz403\UX\Datatable\Column;
 
 class TextColumn extends AbstractColumn
 {
