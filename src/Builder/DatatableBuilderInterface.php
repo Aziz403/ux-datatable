@@ -11,8 +11,9 @@
 
 namespace Aziz403\UX\Datatable\Builder;
 
-use Aziz403\UX\Datatable\Service\DataProcess;
-use Aziz403\UX\Datatable\Service\ExportExcelService;
+use Aziz403\UX\Datatable\Model\EntityDatatable;
+use Aziz403\UX\Datatable\Helper\DataProcess;
+use Aziz403\UX\Datatable\Helper\ExportExcelService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,13 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @final
  */
-interface ResponseBuilderInterface
+interface DatatableBuilderInterface
 {
-    const DEFAULT_TEMPLATE_PATH = "{entity}/_actions.html.twig";
-
-    public function datatable(Request $request, string $class,?string $actionsTemplate = self::DEFAULT_TEMPLATE_PATH): Response;
-
-    public function generateExcel(Request $request, string $class): Response;
-
-    public function choices(string $class, string $displayName): Response;
+    public function createDatatableFromEntity(string $className): EntityDatatable;
 }
