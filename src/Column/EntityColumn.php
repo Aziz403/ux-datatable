@@ -17,16 +17,32 @@ namespace Aziz403\UX\Datatable\Column;
 class EntityColumn extends AbstractColumn
 {
     private string $entity;
-    private string $field;
+    private ?string $field;
 
-    public function __construct(string $entity,string $field,string $display = null,bool $visible = true,bool $orderable = true)
+    public function __construct(string $entity,string $field = null,string $display = null,bool $visible = true,bool $orderable = true)
     {
-        $this->data = $entity.'.'.$field;
+        $this->data = $entity;
         $this->entity = $entity;
         $this->field = $field;
         $this->text = $display ?? $this->data;
         $this->visible = $visible;
         $this->orderable = $orderable;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntity(): string
+    {
+        return $this->entity;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getField(): ?string
+    {
+        return $this->field;
     }
 
     public function build()

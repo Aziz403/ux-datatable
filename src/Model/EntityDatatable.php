@@ -68,12 +68,12 @@ class EntityDatatable extends AbstractDatatable
     }
 
     /**
-     * @return TwigColumn[]
+     * @return AbstractColumn[]
      */
-    public function getTwigColumns(): array
+    public function getColumnsByType(string $type): array
     {
-        return array_filter($this->columns,function (AbstractColumn $column) {
-            return $column instanceof TwigColumn;
+        return array_filter($this->columns,function (AbstractColumn $column) use ($type) {
+            return $column instanceof $type;
         });
     }
 

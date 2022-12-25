@@ -39,6 +39,12 @@ class DatatableQueriesHelper
         $q = $this->repository
             ->createQueryBuilder($this->alias);
 
+        //add join entities
+        /** @var EntityColumn $column */
+        foreach ($this->datatable->getColumnsByType(EntityColumn::class) as $column){
+            $q->leftJoin($this->alias.".".$column->getEntity(),$column->getEntity());
+        }
+
         if($withOrder){
             //add order in query base on columns
             foreach ($query['orders'] as $order){
@@ -46,7 +52,7 @@ class DatatableQueriesHelper
                 $dir = $order['dir'];
                 $columnInfo = $this->datatable->getColumnByIndex($indexOfColumn);
                 if($columnInfo instanceof EntityColumn){
-
+                    $q->addOrderBy($columnInfo->getEntity().".".$columnInfo->getField(),$dir);
                 }
                 elseif($columnInfo instanceof TwigColumn){
 
@@ -56,9 +62,6 @@ class DatatableQueriesHelper
                 }
             }
         }
-
-        //add join entities
-        //foreach columns -> if col instanseof EntityColumn
 
         //add global search query
         //if $query['search']

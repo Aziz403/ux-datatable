@@ -47,18 +47,28 @@ class DatatableTemplatingHelper
             $row = [];
             foreach ($this->datatable->getColumns() as $column){
                 //get column index and value
+                $methodName = "";
                 $index = $this->datatable->getColumnIndex($column->getData());
                 $method = [$item,"get".ucfirst($column)];
-                if(is_callable($method))
-                $value = call_user_func_array($method,[]);
+                if(is_callable($method,false,$methodName)){
+                    $value = call_user_func_array($method,[]);
+                }
+                elseif(!$column instanceof TwigColumn){
+                    throw new \Exception("$methodName Not Found For Field $column");
+                }
 
-                //add special parts to each column different
+                //add special parts to each column value base on column type
                 if($column instanceof BadgeColumn){
                     $color = $column->getColor($value);
                     $value = "<span class='datatable-badge' style='background-color: $color'>$value</span>";
                 }
                 elseif($column instanceof EntityColumn){
-
+                    if($value){
+                        $funcName = $column->getField() ? "get".ucfirst($column->getField()) : "__toString";
+                        $method = [$value,$funcName];
+                        if(is_callable($method))
+                        $value = call_user_func_array($method,[]);
+                    }
                 }
                 elseif($column instanceof TwigColumn){
                     $value = $this->environment->render($column->getTemplate(),[
