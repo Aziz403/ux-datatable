@@ -39,32 +39,6 @@ class DatatableQueriesHelper
         $q = $this->repository
             ->createQueryBuilder($this->alias);
 
-        if($withSelect){
-            //add query select from columns
-            if($query['columns']){
-                $select = "";
-                foreach ($query['columns'] as $column){
-                    $indexOfColumn = $column['data'];
-                    $columnInfo = $this->datatable->getColumnByIndex($indexOfColumn);
-                    if(!$columnInfo){
-                        throw new \Exception("Column Has Index ".$indexOfColumn." Not Found in EntityDatatable::columns");
-                    }
-
-                    if($columnInfo instanceof  EntityColumn){
-
-                    }
-                    elseif($columnInfo instanceof TwigColumn){
-
-                    }
-                    else{
-                        $select .= "$this->alias.$columnInfo,";
-                    }
-                }
-                $select = substr_replace($select ,"", -1);
-                $q->select($select);
-            }
-        }
-
         if($withOrder){
             //add order in query base on columns
             foreach ($query['orders'] as $order){
@@ -86,7 +60,10 @@ class DatatableQueriesHelper
         //add join entities
         //foreach columns -> if col instanseof EntityColumn
 
-        //add search query
+        //add global search query
+        //if $query['search']
+
+        //add filter columns query
         if($query['columns']){
             foreach ($query['columns'] as $column){
                 if($searchValue = $column['search']['value']){

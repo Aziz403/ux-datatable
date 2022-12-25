@@ -12,6 +12,10 @@
 namespace Aziz403\UX\Datatable\Helper;
 
 use Aziz403\UX\Datatable\Column\BadgeColumn;
+use Aziz403\UX\Datatable\Column\BooleanColumn;
+use Aziz403\UX\Datatable\Column\CustomColumn;
+use Aziz403\UX\Datatable\Column\EntityColumn;
+use Aziz403\UX\Datatable\Column\TextColumn;
 use Aziz403\UX\Datatable\Column\TwigColumn;
 use Aziz403\UX\Datatable\Model\EntityDatatable;
 use Twig\Environment;
@@ -31,39 +35,40 @@ class DatatableTemplatingHelper
     }
 
     /**
+     * convert data from array of entity objects to datatable result
      * @param array $data
      * @return array
      */
     public function renderData(array $data) :array
     {
-        $renderData = [];
-        $twigColumns = $this->datatable->getTwigColumns();
+        $result = [];
 
-        foreach ($data as $row){
-            foreach ($row as $cell=>$value){
-                $columnInfo = $this->datatable->getColumn($cell);
+        foreach ($data as $item){
+            $row = [];
+            foreach ($this->datatable->getColumns() as $column){
+                //get column index and value
+                $index = $this->datatable->getColumnIndex($column->getData());
+                $method = [$item,"get".ucfirst($column)];
+                if(is_callable($method))
+                $value = call_user_func_array($method,[]);
 
-                if($columnInfo instanceof BadgeColumn) {
-                    $color = $columnInfo->getColor($value);
-                    if(str_starts_with($color,"#")){
-                        $value = "<span class='datatable-badge' style='background-color: $color'>$value</span>";
-                    }
-                    else{
-                        $value = "<span class='datatable-badge badge-$color'>$value</span>";
-                    }
+                //add special parts to each column different
+                if($column instanceof BadgeColumn){
+                    $color = $column->getColor($value);
+                    $value = "<span class='datatable-badge' style='background-color: $color'>$value</span>";
                 }
-                //replace item name by index in the data var
-                $row[$this->datatable->getColumnIndex($columnInfo->getData())] = $value;
-            }
+                elseif($column instanceof EntityColumn){
 
-            //add twig columns if exists
-            foreach ($twigColumns as $columnInfo){
-                $result = $this->environment->render($columnInfo->getTemplate(),[$row]);
-                $row[$this->datatable->getColumnIndex($columnInfo->getData())] = $result;
+                }
+                elseif($column instanceof TwigColumn){
+                    $value = $this->environment->render($column->getTemplate(),[
+                        'entity' => $item
+                    ]);
+                }
+                $row[$index] = $value;
             }
-
-            $renderData[] = $row;
+            $result[] = $row;
         }
-        return $renderData;
+        return $result;
     }
 }
