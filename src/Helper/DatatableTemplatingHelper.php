@@ -14,6 +14,7 @@ namespace Aziz403\UX\Datatable\Helper;
 use Aziz403\UX\Datatable\Column\BadgeColumn;
 use Aziz403\UX\Datatable\Column\BooleanColumn;
 use Aziz403\UX\Datatable\Column\CustomColumn;
+use Aziz403\UX\Datatable\Column\DateColumn;
 use Aziz403\UX\Datatable\Column\EntityColumn;
 use Aziz403\UX\Datatable\Column\TextColumn;
 use Aziz403\UX\Datatable\Column\TwigColumn;
@@ -61,6 +62,9 @@ class DatatableTemplatingHelper
                 if($column instanceof BadgeColumn){
                     $color = $column->getColor($value);
                     $value = "<span class='datatable-badge' style='background-color: $color'>$value</span>";
+                }
+                elseif($column instanceof DateColumn){
+                    $value = $value->format($column->getFormat());
                 }
                 elseif($column instanceof EntityColumn){
                     if($value){
