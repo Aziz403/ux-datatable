@@ -27,6 +27,14 @@ class TwigColumn extends AbstractColumn
         $this->orderable = $orderable;
     }
 
+    /**
+     * @return string
+     */
+    public function getTemplate(): string
+    {
+        return $this->template;
+    }
+
     public function build()
     {
         return [

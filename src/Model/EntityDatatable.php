@@ -12,6 +12,7 @@
 namespace Aziz403\UX\Datatable\Model;
 
 use Aziz403\UX\Datatable\Column\AbstractColumn;
+use Aziz403\UX\Datatable\Column\TwigColumn;
 use Aziz403\UX\Datatable\Helper\DatatableQueriesHelper;
 use Aziz403\UX\Datatable\Helper\DatatableTemplatingHelper;
 use Doctrine\ORM\EntityRepository;
@@ -64,6 +65,16 @@ class EntityDatatable extends AbstractDatatable
     public function getColumns(): array
     {
         return $this->columns;
+    }
+
+    /**
+     * @return TwigColumn[]
+     */
+    public function getTwigColumns(): array
+    {
+        return array_filter($this->columns,function (AbstractColumn $column) {
+            return $column instanceof TwigColumn;
+        });
     }
 
     /**

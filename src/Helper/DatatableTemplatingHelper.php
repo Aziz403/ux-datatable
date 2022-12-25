@@ -37,14 +37,13 @@ class DatatableTemplatingHelper
     public function renderData(array $data) :array
     {
         $renderData = [];
+        $twigColumns = $this->datatable->getTwigColumns();
+
         foreach ($data as $row){
             foreach ($row as $cell=>$value){
                 $columnInfo = $this->datatable->getColumn($cell);
 
-                if($columnInfo instanceof TwigColumn) {
-
-                }
-                elseif($columnInfo instanceof BadgeColumn) {
+                if($columnInfo instanceof BadgeColumn) {
                     $color = $columnInfo->getColor($value);
                     if(str_starts_with($color,"#")){
                         $value = "<span class='datatable-badge' style='background-color: $color'>$value</span>";
@@ -56,6 +55,13 @@ class DatatableTemplatingHelper
                 //replace item name by index in the data var
                 $row[$this->datatable->getColumnIndex($columnInfo->getData())] = $value;
             }
+
+            //add twig columns if exists
+            foreach ($twigColumns as $columnInfo){
+                $result = $this->environment->render($columnInfo->getTemplate(),[$row]);
+                $row[$this->datatable->getColumnIndex($columnInfo->getData())] = $result;
+            }
+
             $renderData[] = $row;
         }
         return $renderData;
