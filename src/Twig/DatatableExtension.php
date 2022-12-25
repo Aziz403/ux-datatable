@@ -20,8 +20,6 @@ use Twig\TwigFunction;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
- *
- * @final
  */
 class DatatableExtension extends AbstractExtension
 {

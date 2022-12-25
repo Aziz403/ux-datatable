@@ -47,6 +47,7 @@ class EntityDatatable extends AbstractDatatable
         $this->queriesService = new DatatableQueriesHelper($repository,$this);
         $this->templatingService = new DatatableTemplatingHelper($environment,$this);
         $this->options = self::DEFAULT_DATATABLE_OPTIONS;
+        $this->attributes['id'] = "table".random_int(9,999);
     }
 
     /**
@@ -78,6 +79,27 @@ class EntityDatatable extends AbstractDatatable
             return null;
         }
         return reset($res);
+    }
+
+    /**
+     * @param int $index
+     * @return AbstractColumn|null
+     */
+    public function getColumnByIndex(int $index): ?AbstractColumn
+    {
+        return $this->columns[$index];
+    }
+
+    /**
+     * @param string $data
+     * @return AbstractColumn|null
+     */
+    public function getColumnIndex(string $data): ?int
+    {
+        return array_search(
+            $this->getColumn($data),
+            $this->columns
+        );
     }
 
     /**
@@ -118,12 +140,10 @@ class EntityDatatable extends AbstractDatatable
      */
     public function isSubmitted():bool
     {
-        $draw = $this->request->get('draw');
-        $orders = $this->request->get('orders');
-        $columns = $this->request->get('columns');
-        $start = $this->request->get('start');
-        $length = $this->request->get('length');
-        return $draw && $orders && $columns & $start && $length;
+        if(!$this->request){
+            return false;
+        }
+        return $this->request->get('draw',false);
     }
 
     /**
@@ -156,13 +176,13 @@ class EntityDatatable extends AbstractDatatable
     public function getResponse(): JsonResponse
     {
         //check if request handled
-        if($this->request){
+        if(!$this->request){
             throw new \Exception(Request::class." Not Found,Maybe you forget send Request in EntityDatatable::handleRequest method");
         }
 
         $query = [
             'columns' => $this->request->get('columns'),
-            'orders' => $this->request->get('orders'),
+            'orders' => $this->request->get('order'),
             'start' => $this->request->get('start'),
             'length' => $this->request->get('length')
         ];
@@ -175,6 +195,7 @@ class EntityDatatable extends AbstractDatatable
         $data = $this->templatingService->renderData($records);
 
         //clear request
+        $draw = $this->request->get('draw',1);
         $this->request = null;
 
         //save data to later usage
@@ -182,7 +203,7 @@ class EntityDatatable extends AbstractDatatable
             "recordsTotal" => $recordsTotal,
             "recordsFiltered" => $recordsFiltered,
             "data" => $data,
-            "draw" => $this->request->get('draw',1)
+            "draw" => $draw
         ]);
     }
 }

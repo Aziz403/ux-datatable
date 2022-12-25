@@ -44,7 +44,12 @@ class DatatableQueriesHelper
             if($query['columns']){
                 $select = "";
                 foreach ($query['columns'] as $column){
-                    $columnInfo = $this->datatable->getColumn($column['data']);
+                    $indexOfColumn = $column['data'];
+                    $columnInfo = $this->datatable->getColumnByIndex($indexOfColumn);
+                    if(!$columnInfo){
+                        throw new \Exception("Column Has Index ".$indexOfColumn." Not Found in EntityDatatable::columns");
+                    }
+
                     if($columnInfo instanceof  EntityColumn){
 
                     }
@@ -63,9 +68,9 @@ class DatatableQueriesHelper
         if($withOrder){
             //add order in query base on columns
             foreach ($query['orders'] as $order){
-                $data = $order['column'];
+                $indexOfColumn = $order['column'];
                 $dir = $order['dir'];
-                $columnInfo = $this->datatable->getColumn($data);
+                $columnInfo = $this->datatable->getColumnByIndex($indexOfColumn);
                 if($columnInfo instanceof EntityColumn){
 
                 }
@@ -73,7 +78,7 @@ class DatatableQueriesHelper
 
                 }
                 else{
-                    $q->addOrderBy($data,$dir);
+                    $q->addOrderBy("$this->alias.$columnInfo",$dir);
                 }
             }
         }
@@ -85,7 +90,8 @@ class DatatableQueriesHelper
         if($query['columns']){
             foreach ($query['columns'] as $column){
                 if($searchValue = $column['search']['value']){
-                    $columnInfo = $this->datatable->getColumn($column['data']);
+                    $indexOfColumn = $column['data'];
+                    $columnInfo = $this->datatable->getColumn($indexOfColumn);
 
                 }
             }

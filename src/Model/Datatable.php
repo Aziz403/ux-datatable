@@ -16,6 +16,9 @@ namespace Aziz403\UX\Datatable\Model;
  */
 class Datatable extends AbstractDatatable
 {
+    /**
+     * @return array
+     */
     public function createView(): array
     {
         return [

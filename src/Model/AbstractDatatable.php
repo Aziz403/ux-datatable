@@ -74,9 +74,6 @@ abstract class AbstractDatatable
         $this->attributes['data-controller'] = $controllerName;
     }
 
-    /**
-     * @return array
-     */
     public abstract function createView(): array;
 
 }

@@ -38,14 +38,19 @@ class DatatableTemplatingHelper
     {
         $renderData = [];
         foreach ($data as $row){
-            $columnInfo = $this->datatable->getColumn($row['data']);
-            if($columnInfo instanceof TwigColumn) {
+            foreach ($row as $cell=>$value){
+                $columnInfo = $this->datatable->getColumn($cell);
+                //replace item name by index in the data var
+                $row[$this->datatable->getColumnIndex($columnInfo->getData())] = $value;
 
-            }
-            elseif($columnInfo instanceof BadgeColumn) {
+                if($columnInfo instanceof TwigColumn) {
 
+                }
+                elseif($columnInfo instanceof BadgeColumn) {
+
+                }
             }
-            //dd($row);
+            $renderData[] = $row;
         }
         return $renderData;
     }
