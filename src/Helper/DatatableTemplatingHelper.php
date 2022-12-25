@@ -48,14 +48,19 @@ class DatatableTemplatingHelper
             $row = [];
             foreach ($this->datatable->getColumns() as $column){
                 //get column index and value
-                $methodName = "";
                 $index = $this->datatable->getColumnIndex($column->getData());
-                $method = [$item,"get".ucfirst($column)];
-                if(is_callable($method,false,$methodName)){
-                    $value = call_user_func_array($method,[]);
+                $getMethodName = "";
+                $isMethodName = "";
+                $getMethod = [$item,"get".ucfirst($column)];
+                $isMethod = [$item,"is".ucfirst($column)];
+                if(is_callable($getMethod,false,$getMethodName)){
+                    $value = call_user_func_array($getMethod,[]);
+                }
+                elseif(is_callable($isMethod,false,$isMethodName)){
+                    $value = call_user_func_array($isMethod,[]);
                 }
                 elseif(!$column instanceof TwigColumn){
-                    throw new \Exception("$methodName Not Found For Field $column");
+                    throw new \Exception("Not Found Getter For $column, With Name $getMethodName or $isMethodName");
                 }
 
                 //add special parts to each column value base on column type
@@ -65,6 +70,9 @@ class DatatableTemplatingHelper
                 }
                 elseif($column instanceof DateColumn){
                     $value = $value->format($column->getFormat());
+                }
+                elseif($column instanceof BooleanColumn){
+                    $value = $column->getResult($value);
                 }
                 elseif($column instanceof EntityColumn){
                     if($value){
