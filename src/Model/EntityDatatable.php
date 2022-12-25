@@ -26,10 +26,8 @@ use Twig\Environment;
 class EntityDatatable extends AbstractDatatable
 {
     const DEFAULT_DATATABLE_OPTIONS = [
-        'dom' => "<Bl>t<ip>r",
         'processing' => true,
-        'serverSide' => true,
-        'order' => [[0, 'desc']]
+        'serverSide' => true
     ];
 
     private string $className;
