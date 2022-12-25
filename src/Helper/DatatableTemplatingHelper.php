@@ -40,15 +40,21 @@ class DatatableTemplatingHelper
         foreach ($data as $row){
             foreach ($row as $cell=>$value){
                 $columnInfo = $this->datatable->getColumn($cell);
-                //replace item name by index in the data var
-                $row[$this->datatable->getColumnIndex($columnInfo->getData())] = $value;
 
                 if($columnInfo instanceof TwigColumn) {
 
                 }
                 elseif($columnInfo instanceof BadgeColumn) {
-
+                    $color = $columnInfo->getColor($value);
+                    if(str_starts_with($color,"#")){
+                        $value = "<span class='datatable-badge' style='background-color: $color'>$value</span>";
+                    }
+                    else{
+                        $value = "<span class='datatable-badge badge-$color'>$value</span>";
+                    }
                 }
+                //replace item name by index in the data var
+                $row[$this->datatable->getColumnIndex($columnInfo->getData())] = $value;
             }
             $renderData[] = $row;
         }

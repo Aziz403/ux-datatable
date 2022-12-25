@@ -23,25 +23,35 @@ class BadgeColumn extends AbstractColumn
     const COLOR_INFO = 'info';
     const COLOR_DANGER = 'danger';
 
-    private string $condition;
-    private string $color;
+    private $condition;
+    private string $trueColor;
+    private string $falseColor;
 
-    public function __construct(string $field,callable $condition,string $color = self::COLOR_DEFAULT,string $display = '',bool $visible = true,bool $orderable = true)
+    public function __construct(string $field,string $trueColor = self::COLOR_PRIMARY,string $falseColor = self::COLOR_DEFAULT,?callable $condition = null,string $display = '',bool $visible = true,bool $orderable = true)
     {
         $this->data = $field;
-        $this->condition = "";//TODO: khas nedir hena callable
-        $this->color = $color;
+        $this->condition = $condition;
+        $this->trueColor = $trueColor;
+        $this->falseColor = $falseColor;
         $this->text = $display ?? $field;
         $this->visible = $visible;
         $this->orderable = $orderable;
+    }
+
+    public function getColor(string $value) :string
+    {
+        //get badge color base on condition
+        if($this->condition && is_callable($this->condition)){
+            return call_user_func($this->condition,$value);
+        }
+        //get badge color from true&false colors
+        return $value ? $this->trueColor : $this->falseColor;
     }
 
     public function build()
     {
         return [
             'data' => $this->data,
-            'condition' => $this->condition,
-            'color' => $this->color,
             'text' => $this->text,
             'visible' => $this->visible,
             'orderable' => $this->orderable
