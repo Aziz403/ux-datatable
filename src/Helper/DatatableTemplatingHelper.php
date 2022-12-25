@@ -16,6 +16,7 @@ use Aziz403\UX\Datatable\Column\BooleanColumn;
 use Aziz403\UX\Datatable\Column\CustomColumn;
 use Aziz403\UX\Datatable\Column\DateColumn;
 use Aziz403\UX\Datatable\Column\EntityColumn;
+use Aziz403\UX\Datatable\Column\InlineTwigColumn;
 use Aziz403\UX\Datatable\Column\TextColumn;
 use Aziz403\UX\Datatable\Column\TwigColumn;
 use Aziz403\UX\Datatable\Model\EntityDatatable;
@@ -59,7 +60,7 @@ class DatatableTemplatingHelper
                 elseif(is_callable($isMethod,false,$isMethodName)){
                     $value = call_user_func_array($isMethod,[]);
                 }
-                elseif(!$column instanceof TwigColumn){
+                elseif(!$column instanceof TwigColumn && !$column instanceof InlineTwigColumn){
                     throw new \Exception("Not Found Getter For $column, With Name $getMethodName or $isMethodName");
                 }
 
@@ -84,6 +85,12 @@ class DatatableTemplatingHelper
                 }
                 elseif($column instanceof TwigColumn){
                     $value = $this->environment->render($column->getTemplate(),[
+                        'entity' => $item
+                    ]);
+                }
+                elseif($column instanceof InlineTwigColumn){
+                    $value = $this->environment->render("@Datatable/column/inline_twig.html.twig",[
+                        'inline_template' => $column->getTemplate(),
                         'entity' => $item
                     ]);
                 }

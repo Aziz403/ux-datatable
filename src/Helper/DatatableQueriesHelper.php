@@ -12,6 +12,7 @@
 namespace Aziz403\UX\Datatable\Helper;
 
 use Aziz403\UX\Datatable\Column\EntityColumn;
+use Aziz403\UX\Datatable\Column\InlineTwigColumn;
 use Aziz403\UX\Datatable\Column\TwigColumn;
 use Aziz403\UX\Datatable\Model\EntityDatatable;
 use Doctrine\ORM\EntityRepository;
@@ -54,7 +55,7 @@ class DatatableQueriesHelper
                 if($columnInfo instanceof EntityColumn){
                     $q->addOrderBy($columnInfo->getEntity().".".$columnInfo->getField(),$dir);
                 }
-                elseif($columnInfo instanceof TwigColumn){
+                elseif($columnInfo instanceof TwigColumn || $columnInfo instanceof InlineTwigColumn){
 
                 }
                 else{
