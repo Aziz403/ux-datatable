@@ -39,6 +39,29 @@ abstract class AbstractDatatable
     }
 
     /**
+     * @param array $options
+     * @return $this
+     */
+    public function addOptions(array $options): self
+    {
+        $this->options = array_merge($this->options,$options);
+
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @param $value
+     * @return $this
+     */
+    public function addOption(string $key, $value): self
+    {
+        $this->options[$key] = $value;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getAttributes(): array
@@ -53,6 +76,29 @@ abstract class AbstractDatatable
     public function setAttributes(array $attributes): self
     {
         $this->attributes = $attributes;
+
+        return $this;
+    }
+
+    /**
+     * @param array $attributes
+     * @return $this
+     */
+    public function addAttributes(array $attributes): self
+    {
+        $this->attributes = array_merge($this->attributes,$attributes);
+
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @param string $value
+     * @return $this
+     */
+    public function addAttribute(string $key, string $value): self
+    {
+        $this->attributes[$key] = $value;
 
         return $this;
     }
