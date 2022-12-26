@@ -35,9 +35,9 @@ class EntityDatatable extends AbstractDatatable
     private ?string $path;
     private array $columns;
 
-    private Criteria $criteria;
+    private ?Criteria $criteria = null;
 
-    private ?Request $request;
+    private ?Request $request = null;
 
     private DatatableQueriesHelper $queriesService;
     private DatatableTemplatingHelper $templatingService;
@@ -148,9 +148,9 @@ class EntityDatatable extends AbstractDatatable
     }
 
     /**
-     * @return Criteria
+     * @return Criteria|null
      */
-    public function getCriteria(): Criteria
+    public function getCriteria(): ?Criteria
     {
         return $this->criteria;
     }
@@ -211,6 +211,7 @@ class EntityDatatable extends AbstractDatatable
         $query = [
             'columns' => $this->request->get('columns'),
             'orders' => $this->request->get('order'),
+            'search' => $this->request->get('search'),
             'start' => $this->request->get('start'),
             'length' => $this->request->get('length')
         ];

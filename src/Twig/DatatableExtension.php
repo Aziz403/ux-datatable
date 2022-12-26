@@ -47,7 +47,7 @@ class DatatableExtension extends AbstractExtension
         if ($datatable->getDataController()) {
             $controllers[$datatable->getDataController()] = [];
         }
-        $controllers['@aziz403/ux-datatablejs/entity-controller'] = ['view' => $datatable->createView()];
+        $controllers['@aziz403/ux-datatablejs/entity_datatable'] = ['view' => $datatable->createView()];
         if (class_exists(StimulusControllersDto::class)) {
             $dto = new StimulusControllersDto($env);
             foreach ($controllers as $controllerName => $controllerValues) {

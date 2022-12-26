@@ -5,14 +5,14 @@
     "version": "1.0.0",
     "symfony": {
         "controllers": {
-            "simple-datatable": {
-                "main": "dist/controllers/simple-controller.js",
+            "simple_datatable": {
+                "main": "controllers/simple_controller.js",
                 "webpackMode": "eager",
                 "fetch": "eager",
                 "enabled": true
             },
-            "entity-datatable": {
-                "main": "dist/controllers/entity-controller.js",
+            "entity_datatable": {
+                "main": "controllers/entity_controller.js",
                 "webpackMode": "eager",
                 "fetch": "eager",
                 "enabled": true

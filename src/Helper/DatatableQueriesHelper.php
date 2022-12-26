@@ -72,8 +72,7 @@ class DatatableQueriesHelper
         }
 
         //add global search query
-        if($query['search']){
-            $value = $column['search']['value'];
+        if($value = $query['search']['value']){
 
         }
 
