@@ -16,12 +16,16 @@ namespace Aziz403\UX\Datatable\Column;
  */
 class EntityColumn extends AbstractColumn
 {
+    const ENTITY_INNER_JOIN = "ENTITY_INNER_JOIN";
+    const ENTITY_LEFT_JOIN = "ENTITY_LEFT_JOIN";
+
     private string $entity;
     private ?string $field;
     private ?string $nullValue;
     private $render;
+    private string $joinType;
 
-    public function __construct(string $entity,?string $field = null,?string $display = null,$render = null,?string $nullValue = null,bool $visible = true,bool $orderable = true)
+    public function __construct(string $entity,?string $field = null,?string $display = null,$render = null,?string $nullValue = null,string $joinType = self::ENTITY_LEFT_JOIN,bool $visible = true,bool $orderable = true)
     {
         $this->data = $entity;
         $this->entity = $entity;
@@ -31,6 +35,7 @@ class EntityColumn extends AbstractColumn
         $this->orderable = $orderable;
         $this->nullValue = $nullValue;
         $this->render = $render;
+        $this->joinType = $joinType;
     }
 
     public function render($entity) :?string
@@ -67,6 +72,14 @@ class EntityColumn extends AbstractColumn
     public function getField(): ?string
     {
         return $this->field;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJoinType(): string
+    {
+        return $this->joinType;
     }
 
     public function build()
