@@ -2,7 +2,7 @@
     "name": "@aziz403/ux-datatablejs",
     "description": "Datatable.net integration for Symfony",
     "license": "MIT",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "symfony": {
         "controllers": {
             "simple_datatable": {

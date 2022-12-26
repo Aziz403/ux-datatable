@@ -45,5 +45,5 @@
     "symfony/flex": "<1.13",
     "symfony/webpack-encore-bundle": "<1.11"
   },
-  "version": "1.0.0"
+  "version": "1.0.2"
 }
