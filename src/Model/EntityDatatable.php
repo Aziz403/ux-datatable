@@ -15,6 +15,7 @@ use Aziz403\UX\Datatable\Column\AbstractColumn;
 use Aziz403\UX\Datatable\Column\TwigColumn;
 use Aziz403\UX\Datatable\Helper\DatatableQueriesHelper;
 use Aziz403\UX\Datatable\Helper\DatatableTemplatingHelper;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,8 @@ class EntityDatatable extends AbstractDatatable
     private string $className;
     private ?string $path;
     private array $columns;
+
+    private Criteria $criteria;
 
     private ?Request $request;
 
@@ -142,6 +145,22 @@ class EntityDatatable extends AbstractDatatable
         $this->columns[] = $column;
 
         return $this;
+    }
+
+    /**
+     * @return Criteria
+     */
+    public function getCriteria(): Criteria
+    {
+        return $this->criteria;
+    }
+
+    /**
+     * @param Criteria $criteria
+     */
+    public function setCriteria(Criteria $criteria): void
+    {
+        $this->criteria = $criteria;
     }
 
     /**

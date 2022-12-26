@@ -72,7 +72,10 @@ class DatatableQueriesHelper
         }
 
         //add global search query
-        //if $query['search']
+        if($query['search']){
+            $value = $column['search']['value'];
+
+        }
 
         //add filter columns query
         if($query['columns']){
@@ -83,6 +86,11 @@ class DatatableQueriesHelper
 
                 }
             }
+        }
+
+        //add criteria if exists
+        if($criteria = $this->datatable->getCriteria()){
+            $q->addCriteria($criteria);
         }
 
         if($withPagination){
