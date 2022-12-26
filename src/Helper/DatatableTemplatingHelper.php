@@ -65,23 +65,20 @@ class DatatableTemplatingHelper
                 }
 
                 //add special parts to each column value base on column type
+                if($column instanceof TextColumn){
+                    $value = $column->render($value);
+                }
                 if($column instanceof BadgeColumn){
-                    $color = $column->getColor($value);
-                    $value = "<span class='datatable-badge' style='background-color: $color'>$value</span>";
+                    $value = $column->render($value);
                 }
                 elseif($column instanceof DateColumn){
-                    $value = $value->format($column->getFormat());
+                    $value = $column->render($value);
                 }
                 elseif($column instanceof BooleanColumn){
-                    $value = $column->getResult($value);
+                    $value = $column->render($value);
                 }
                 elseif($column instanceof EntityColumn){
-                    if($value){
-                        $funcName = $column->getField() ? "get".ucfirst($column->getField()) : "__toString";
-                        $method = [$value,$funcName];
-                        if(is_callable($method))
-                        $value = call_user_func_array($method,[]);
-                    }
+                    $value = $column->render($value);
                 }
                 elseif($column instanceof TwigColumn){
                     $value = $this->environment->render($column->getTemplate(),[
@@ -94,7 +91,7 @@ class DatatableTemplatingHelper
                         'entity' => $item
                     ]);
                 }
-                $row[$index] = $value;
+                $row[$index] = "$value";
             }
             $result[] = $row;
         }

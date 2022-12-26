@@ -16,13 +16,25 @@ namespace Aziz403\UX\Datatable\Column;
  */
 class TextColumn extends AbstractColumn
 {
+    private $render;
 
-    public function __construct(string $field,?string $display = null,bool $visible = true,bool $orderable = true)
+    public function __construct(string $field,?string $display = null,bool $visible = true,bool $orderable = true,$render = null)
     {
         $this->data = $field;
         $this->text = $display ?? $field;
         $this->visible = $visible;
         $this->orderable = $orderable;
+        $this->render = $render;
+    }
+
+    public function render(string $value) :string
+    {
+        //check if has custom render condition
+        if($this->render && is_callable($this->render)){
+            return call_user_func($this->render,$value);
+        }
+        //return the same result
+        return $value;
     }
 
     public function build()

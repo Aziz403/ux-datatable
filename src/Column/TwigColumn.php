@@ -18,7 +18,7 @@ class TwigColumn extends AbstractColumn
 {
     private string $template;
 
-    public function __construct(string $field,string $template,string $display = null, $visible = true,bool $orderable = true)
+    public function __construct(string $field,string $template,?string $display = null, $visible = true,bool $orderable = true)
     {
         $this->data = $field;
         $this->template = $template;

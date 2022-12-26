@@ -23,29 +23,32 @@ class BadgeColumn extends AbstractColumn
     const COLOR_INFO = 'info';
     const COLOR_DANGER = 'danger';
 
-    private $condition;
+    private $render;
     private string $trueColor;
     private string $falseColor;
 
-    public function __construct(string $field,string $trueColor = self::COLOR_PRIMARY,string $falseColor = self::COLOR_DEFAULT,?callable $condition = null,string $display = '',bool $visible = true,bool $orderable = true)
+    public function __construct(string $field,string $trueColor = self::COLOR_PRIMARY,string $falseColor = self::COLOR_DEFAULT,?callable $render = null,?string $display = null,bool $visible = true,bool $orderable = true)
     {
         $this->data = $field;
-        $this->condition = $condition;
         $this->trueColor = $trueColor;
         $this->falseColor = $falseColor;
         $this->text = $display ?? $field;
         $this->visible = $visible;
         $this->orderable = $orderable;
+        $this->render = $render;
     }
 
-    public function getColor(string $value) :string
+    public function render(string $value) :string
     {
-        //get badge color base on condition
-        if($this->condition && is_callable($this->condition)){
-            return call_user_func($this->condition,$value);
+        if($this->render && is_callable($this->render)){
+            //get badge color base on condition
+            $color = call_user_func($this->render,$value);
         }
-        //get badge color from true&false colors
-        return $value ? $this->trueColor : $this->falseColor;
+        else{
+            //get badge color from true&false colors
+            $color = $value ? $this->trueColor : $this->falseColor;
+        }
+        return "<span class='datatable-badge' style='background-color: $color'>$value</span>";
     }
 
     public function build()
