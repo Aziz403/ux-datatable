@@ -11,6 +11,8 @@
 
 namespace Aziz403\UX\Datatable\Column;
 
+use Doctrine\ORM\QueryBuilder;
+
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
  */
@@ -18,9 +20,9 @@ class TwigColumn extends AbstractColumn
 {
     private string $template;
 
-    public function __construct(string $field,string $template,?string $displayName = null, $visible = true,bool $orderable = true)
+    public function __construct(string $field,string $template,?string $displayName = null, $visible = true)
     {
-        parent::__construct($field, $displayName, $visible, $orderable);
+        parent::__construct($field, $displayName, $visible, false, false,false);
         $this->template = $template;
     }
 
@@ -29,5 +31,10 @@ class TwigColumn extends AbstractColumn
         return $this->environment->render($this->template,[
             'entity' => $entity
         ]);
+    }
+
+    public function search(QueryBuilder $builder, string $query): QueryBuilder
+    {
+        return $builder;
     }
 }

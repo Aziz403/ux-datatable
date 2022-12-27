@@ -2,15 +2,17 @@
 
 namespace Aziz403\UX\Datatable\Column;
 
+use Doctrine\ORM\QueryBuilder;
+
 class BooleanColumn extends AbstractColumn
 {
     private string $trueResult;
     private string $falseResult;
     private $render;
 
-    public function __construct(string $field,string $trueResult = "Yes",string $falseResult = "No",?string $displayName = null,bool $visible = true,bool $orderable = true,?callable $render = null)
+    public function __construct(string $field,string $trueResult = "Yes",string $falseResult = "No",?string $displayName = null,bool $visible = true,bool $orderable = true,?callable $render = null,bool $searchable = true)
     {
-        parent::__construct($field,$displayName,$visible,$orderable);
+        parent::__construct($field,$displayName,$visible,$orderable,$searchable,true);
         $this->trueResult = $trueResult;
         $this->falseResult = $falseResult;
         $this->render = $render;
@@ -24,5 +26,10 @@ class BooleanColumn extends AbstractColumn
         }
         //return the same result
         return $value ? $this->trueResult : $this->falseResult;
+    }
+
+    public function search(QueryBuilder $builder, string $query): QueryBuilder
+    {
+        return $builder;
     }
 }

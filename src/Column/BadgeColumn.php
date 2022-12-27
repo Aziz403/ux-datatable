@@ -11,6 +11,8 @@
 
 namespace Aziz403\UX\Datatable\Column;
 
+use Doctrine\ORM\QueryBuilder;
+
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
  */
@@ -27,9 +29,9 @@ class BadgeColumn extends AbstractColumn
     private string $trueColor;
     private string $falseColor;
 
-    public function __construct(string $field,string $trueColor = self::COLOR_PRIMARY,string $falseColor = self::COLOR_DEFAULT,?callable $render = null,?string $displayName = null,bool $visible = true,bool $orderable = true)
+    public function __construct(string $field,string $trueColor = self::COLOR_PRIMARY,string $falseColor = self::COLOR_DEFAULT,?callable $render = null,?string $displayName = null,bool $visible = true,bool $orderable = true,bool $searchable = true)
     {
-        parent::__construct($field,$displayName,$visible,$orderable);
+        parent::__construct($field,$displayName,$visible,$orderable,$searchable,true);
         $this->trueColor = $trueColor;
         $this->falseColor = $falseColor;
         $this->render = $render;
@@ -46,5 +48,10 @@ class BadgeColumn extends AbstractColumn
             $color = $value ? $this->trueColor : $this->falseColor;
         }
         return "<span class='datatable-badge' style='background-color: $color'>$value</span>";
+    }
+
+    public function search(QueryBuilder $builder, string $query): QueryBuilder
+    {
+        return $builder;
     }
 }

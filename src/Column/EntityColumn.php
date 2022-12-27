@@ -11,6 +11,9 @@
 
 namespace Aziz403\UX\Datatable\Column;
 
+use Aziz403\UX\Datatable\Service\DataService;
+use Doctrine\ORM\QueryBuilder;
+
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
  */
@@ -25,9 +28,9 @@ class EntityColumn extends AbstractColumn
     private $render;
     private string $joinType;
 
-    public function __construct(string $entity,?string $field = null,?string $displayName = null,$render = null,?string $nullValue = null,string $joinType = self::ENTITY_LEFT_JOIN,bool $visible = true,bool $orderable = true)
+    public function __construct(string $entity,?string $field = null,?string $displayName = null,$render = null,?string $nullValue = null,string $joinType = self::ENTITY_LEFT_JOIN,bool $visible = true,bool $orderable = true,bool $searchable = true)
     {
-        parent::__construct($entity,$displayName,$visible,$orderable);
+        parent::__construct($entity,$displayName,$visible,$orderable,$searchable,true);
         $this->entity = $entity;
         $this->field = $field;
         $this->nullValue = $nullValue;
@@ -46,13 +49,15 @@ class EntityColumn extends AbstractColumn
         }
         //else check if has specific field to display
         if($this->field){
-            $method = [$value,"get".ucfirst($this->field)];
-            if(is_callable($method)){
-                return call_user_func_array($method,[]);
-            }
+            DataService::getPropValue($value,$this->field);
         }
         //return __toString result
         return "$value";
+    }
+
+    public function search(QueryBuilder $builder, string $query): QueryBuilder
+    {
+        return $builder;
     }
 
     /**

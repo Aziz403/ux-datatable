@@ -12,6 +12,7 @@
 namespace Aziz403\UX\Datatable\Helper;
 
 use Aziz403\UX\Datatable\Model\EntityDatatable;
+use Aziz403\UX\Datatable\Service\DataService;
 use Twig\Environment;
 
 /**
@@ -40,20 +41,13 @@ class DatatableTemplatingHelper
         foreach ($data as $item){
             $row = [];
             foreach ($this->datatable->getColumns() as $column){
-                //get column index and value
+                //get column index
                 $index = $this->datatable->getColumnIndex($column->getData());
-                $getMethodName = "";
-                $isMethodName = "";
-                $getMethod = [$item,"get".ucfirst($column)];
-                $isMethod = [$item,"is".ucfirst($column)];
-                if(is_callable($getMethod,false,$getMethodName)){
-                    $value = call_user_func_array($getMethod,[]);
-                }
-                elseif(is_callable($isMethod,false,$isMethodName)){
-                    $value = call_user_func_array($isMethod,[]);
-                }
-                elseif(!$column instanceof TwigColumn && !$column instanceof InlineTwigColumn){
-                    throw new \Exception("Not Found Getter For $column, With Name $getMethodName or $isMethodName");
+                $value = null;
+
+                //get value from prop if column mapped on entity
+                if($column->isMapped()) {
+                    DataService::getPropValue($item,$column);
                 }
 
                 //add special parts to each column value base on column type

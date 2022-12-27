@@ -11,6 +11,7 @@
 
 namespace Aziz403\UX\Datatable\Column;
 
+use Doctrine\ORM\QueryBuilder;
 use Twig\Environment;
 
 /**
@@ -22,18 +23,24 @@ abstract class AbstractColumn
     protected string $text;
     protected bool $visible;
     protected bool $orderable;
+    protected bool $searchable;
+    protected bool $mapped;
 
     protected Environment $environment;
 
-    public function __construct(string $data,?string $text,bool $visible,bool $orderable)
+    public function __construct(string $data,?string $text,bool $visible,bool $orderable,bool $searchable,bool $mapped)
     {
         $this->data = $data;
         $this->text = $text ?? $data;
         $this->visible = $visible;
         $this->orderable = $orderable;
+        $this->searchable = $searchable;
+        $this->mapped = $mapped;
     }
 
     abstract public function render($entity,$value);
+
+    abstract public function search(QueryBuilder $builder,string $query) :QueryBuilder;
 
     /**
      * @return string
@@ -49,6 +56,22 @@ abstract class AbstractColumn
     public function getData(): string
     {
         return $this->data;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSearchable(): bool
+    {
+        return $this->searchable;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMapped(): bool
+    {
+        return $this->mapped;
     }
 
     /**

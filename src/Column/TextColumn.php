@@ -11,6 +11,9 @@
 
 namespace Aziz403\UX\Datatable\Column;
 
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\QueryBuilder;
+
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
  */
@@ -18,9 +21,9 @@ class TextColumn extends AbstractColumn
 {
     private $render;
 
-    public function __construct(string $field,?string $displayName = null,bool $visible = true,bool $orderable = true,$render = null)
+    public function __construct(string $field,?string $displayName = null,bool $visible = true,bool $orderable = true,$render = null,bool $searchable = true)
     {
-        parent::__construct($field,$displayName,$orderable,$visible);
+        parent::__construct($field,$displayName,$orderable,$visible,$searchable,true);
         $this->render = $render;
     }
 
@@ -32,5 +35,10 @@ class TextColumn extends AbstractColumn
         }
         //return the same result
         return $value;
+    }
+
+    public function search(QueryBuilder $builder, string $query): QueryBuilder
+    {
+        return $builder;
     }
 }

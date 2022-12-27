@@ -71,6 +71,17 @@ class EntityDatatable extends AbstractDatatable
     /**
      * @return AbstractColumn[]
      */
+    public function getSearchableColumns(): array
+    {
+        return array_filter($this->columns,function (AbstractColumn $column) {
+            return $column->isSearchable();
+        });
+    }
+
+    /**
+     * @param string $type
+     * @return array
+     */
     public function getColumnsByType(string $type): array
     {
         return array_filter($this->columns,function (AbstractColumn $column) use ($type) {

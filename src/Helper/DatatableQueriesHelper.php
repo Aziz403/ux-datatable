@@ -62,9 +62,6 @@ class DatatableQueriesHelper
                 if($columnInfo instanceof EntityColumn){
                     $q->addOrderBy($columnInfo->getEntity().".".$columnInfo->getField(),$dir);
                 }
-                elseif($columnInfo instanceof TwigColumn || $columnInfo instanceof InlineTwigColumn){
-
-                }
                 else{
                     $q->addOrderBy("$this->alias.$columnInfo",$dir);
                 }
@@ -73,7 +70,9 @@ class DatatableQueriesHelper
 
         //add global search query
         if($value = $query['search']['value']){
-
+            foreach ($this->datatable->getSearchableColumns() as $column){
+                $q = $column->search($q,$value);
+            }
         }
 
         //add filter columns query
