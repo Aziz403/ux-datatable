@@ -12,6 +12,7 @@
 namespace Aziz403\UX\Datatable\Column;
 
 use Aziz403\UX\Datatable\Service\DataService;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -30,7 +31,9 @@ class EntityColumn extends AbstractColumn
 
     public function __construct(string $entity,?string $field = null,?string $displayName = null,$render = null,?string $nullValue = null,string $joinType = self::ENTITY_LEFT_JOIN,bool $visible = true,bool $orderable = true,bool $searchable = true)
     {
-        parent::__construct($entity,$displayName,$visible,$orderable,$searchable,true);
+        $randAdd = $field ?? rand(9,999);
+        $data = "$entity.$randAdd";
+        parent::__construct($data,$displayName,$visible,$orderable,$searchable,true);
         $this->entity = $entity;
         $this->field = $field;
         $this->nullValue = $nullValue;
@@ -49,7 +52,7 @@ class EntityColumn extends AbstractColumn
         }
         //else check if has specific field to display
         if($this->field){
-            DataService::getPropValue($value,$this->field);
+            return DataService::getPropValue($value,$this->field);
         }
         //return __toString result
         return "$value";
@@ -57,6 +60,33 @@ class EntityColumn extends AbstractColumn
 
     public function search(QueryBuilder $builder, string $query): QueryBuilder
     {
+        return $builder;
+    }
+
+    public function join(QueryBuilder $builder) :QueryBuilder
+    {
+        //get root alias
+        $alias = $builder->getRootAliases()[0];
+        //check if join exists before
+        if(array_key_exists($alias,$builder->getDQLPart("join"))){
+            $join = array_filter($builder->getDQLPart("join")[$alias],function (Join $item){
+               return $item->getAlias()===$this->entity;
+            });
+            //if join exists don't add it again
+            if($join){
+                return $builder;
+            }
+        }
+        if($alias){
+            switch ($this->joinType){
+                case EntityColumn::ENTITY_LEFT_JOIN:
+                    $builder->leftJoin($alias.".".$this->entity,$this->entity);
+                    break;
+                case EntityColumn::ENTITY_INNER_JOIN:
+                    $builder->innerJoin($alias.".".$this->entity,$this->entity);
+                    break;
+            }
+        }
         return $builder;
     }
 
@@ -82,5 +112,10 @@ class EntityColumn extends AbstractColumn
     public function getJoinType(): string
     {
         return $this->joinType;
+    }
+
+    public function __toString()
+    {
+        return $this->entity;
     }
 }

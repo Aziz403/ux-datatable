@@ -11,6 +11,7 @@
 
 namespace Aziz403\UX\Datatable\Helper;
 
+use Aziz403\UX\Datatable\Column\EntityColumn;
 use Aziz403\UX\Datatable\Model\EntityDatatable;
 use Aziz403\UX\Datatable\Service\DataService;
 use Twig\Environment;
@@ -37,7 +38,6 @@ class DatatableTemplatingHelper
     public function renderData(array $data) :array
     {
         $result = [];
-
         foreach ($data as $item){
             $row = [];
             foreach ($this->datatable->getColumns() as $column){
@@ -47,12 +47,13 @@ class DatatableTemplatingHelper
 
                 //get value from prop if column mapped on entity
                 if($column->isMapped()) {
-                    DataService::getPropValue($item,$column);
+                    $value = DataService::getPropValue($item,$column);
                 }
 
                 //add special parts to each column value base on column type
                 $column->setEnvironment($this->environment);
                 $value = $column->render($item,$value);
+
                 $row[$index] = "$value";
             }
             $result[] = $row;

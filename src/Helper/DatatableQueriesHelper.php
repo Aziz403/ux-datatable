@@ -43,14 +43,7 @@ class DatatableQueriesHelper
         //add join entities
         /** @var EntityColumn $column */
         foreach ($this->datatable->getColumnsByType(EntityColumn::class) as $column){
-            switch ($column->getJoinType()){
-                case EntityColumn::ENTITY_LEFT_JOIN:
-                    $q->leftJoin($this->alias.".".$column->getEntity(),$column->getEntity());
-                    break;
-                case EntityColumn::ENTITY_INNER_JOIN:
-                    $q->innerJoin($this->alias.".".$column->getEntity(),$column->getEntity());
-                    break;
-            }
+            $q = $column->join($q);
         }
 
         if($withOrder){
