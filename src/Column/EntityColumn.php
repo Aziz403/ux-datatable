@@ -12,6 +12,7 @@
 namespace Aziz403\UX\Datatable\Column;
 
 use Aziz403\UX\Datatable\Service\DataService;
+use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
@@ -58,9 +59,13 @@ class EntityColumn extends AbstractColumn
         return "$value";
     }
 
-    public function search(QueryBuilder $builder, string $query): QueryBuilder
+    public function search(QueryBuilder $builder, string $query): Comparison
     {
-        return $builder;
+        //where in entity
+        if($this->field){
+            return $builder->expr()->like("$this.$this->field","'%$query%'");
+        }
+        return $builder->expr()->eq("$this.id","'$query'");
     }
 
     public function join(QueryBuilder $builder) :QueryBuilder
@@ -87,6 +92,19 @@ class EntityColumn extends AbstractColumn
                     break;
             }
         }
+        return $builder;
+    }
+
+    public function order(QueryBuilder $builder,string $dir) :QueryBuilder
+    {
+        //get root alias
+        $alias = $builder->getRootAliases()[0];
+
+        //order by field or id if entity field not exists
+        $field = $this->field;
+        $field ??= "id";
+        $builder->addOrderBy($this->entity.".".$field,$dir);
+
         return $builder;
     }
 

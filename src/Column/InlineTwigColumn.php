@@ -2,6 +2,7 @@
 
 namespace Aziz403\UX\Datatable\Column;
 
+use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
 
 class InlineTwigColumn extends AbstractColumn
@@ -22,8 +23,8 @@ class InlineTwigColumn extends AbstractColumn
         ]);
     }
 
-    public function search(QueryBuilder $builder, string $query): QueryBuilder
+    public function search(QueryBuilder $builder, string $query): ?Comparison
     {
-        return $builder;
+        return null;
     }
 }

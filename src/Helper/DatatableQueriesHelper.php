@@ -12,8 +12,6 @@
 namespace Aziz403\UX\Datatable\Helper;
 
 use Aziz403\UX\Datatable\Column\EntityColumn;
-use Aziz403\UX\Datatable\Column\InlineTwigColumn;
-use Aziz403\UX\Datatable\Column\TwigColumn;
 use Aziz403\UX\Datatable\Model\EntityDatatable;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -34,7 +32,7 @@ class DatatableQueriesHelper
         $this->alias = "entity".random_int(9,999);
     }
 
-    public function getQuery(array $query,bool $withSelect = true,bool $withOrder = true,bool $withPagination = true): QueryBuilder
+    public function getQuery(array $query,bool $withOrder = true,bool $withPagination = true): QueryBuilder
     {
         //create query
         $q = $this->repository
@@ -43,7 +41,7 @@ class DatatableQueriesHelper
         //add join entities
         /** @var EntityColumn $column */
         foreach ($this->datatable->getColumnsByType(EntityColumn::class) as $column){
-            $q = $column->join($q);
+            $column->join($q);
         }
 
         if($withOrder){
@@ -51,30 +49,29 @@ class DatatableQueriesHelper
             foreach ($query['orders'] as $order){
                 $indexOfColumn = $order['column'];
                 $dir = $order['dir'];
-                $columnInfo = $this->datatable->getColumnByIndex($indexOfColumn);
-                if($columnInfo instanceof EntityColumn){
-                    $q->addOrderBy($columnInfo->getEntity().".".$columnInfo->getField(),$dir);
-                }
-                else{
-                    $q->addOrderBy("$this->alias.$columnInfo",$dir);
-                }
+                $column = $this->datatable->getColumnByIndex($indexOfColumn);
+
+                $column->order($q,$dir);
             }
         }
 
         //add global search query
         if($value = $query['search']['value']){
+            $search =  [];
             foreach ($this->datatable->getSearchableColumns() as $column){
-                $q = $column->search($q,$value);
+                 $search[] = $column->search($q,$value);
             }
+            $q->andWhere($q->expr()->orX(...$search));
         }
 
         //add filter columns query
         if($query['columns']){
-            foreach ($query['columns'] as $column){
-                if($searchValue = $column['search']['value']){
-                    $indexOfColumn = $column['data'];
-                    $columnInfo = $this->datatable->getColumn($indexOfColumn);
+            foreach ($query['columns'] as $queryColumn){
+                if($value = $queryColumn['search']['value']){
+                    $indexOfColumn = $queryColumn['data'];
+                    $column = $this->datatable->getColumn($indexOfColumn);
 
+                    $q->andWhere($column->search($q,$value));
                 }
             }
         }
@@ -104,7 +101,7 @@ class DatatableQueriesHelper
     {
         $q = $this->repository->createQueryBuilder($this->alias);
         if($query){
-            $q = $this->getQuery($query,false,false,false);
+            $q = $this->getQuery($query,false,false);
         }
         return $q->select("COUNT($this->alias.id)")
             ->getQuery()

@@ -2,6 +2,7 @@
 
 namespace Aziz403\UX\Datatable\Column;
 
+use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
 
 class DateColumn extends AbstractColumn
@@ -26,8 +27,12 @@ class DateColumn extends AbstractColumn
         return $value->format($this->format);
     }
 
-    public function search(QueryBuilder $builder, string $query): QueryBuilder
+    public function search(QueryBuilder $builder, string $query): Comparison
     {
-        return $builder;
+        //get root alias
+        $alias = $builder->getRootAliases()[0];
+
+        //where in date
+        return $builder->expr()->like("$alias.$this->data","'%$query%'");
     }
 }

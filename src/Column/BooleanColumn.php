@@ -2,6 +2,7 @@
 
 namespace Aziz403\UX\Datatable\Column;
 
+use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
 
 class BooleanColumn extends AbstractColumn
@@ -28,8 +29,26 @@ class BooleanColumn extends AbstractColumn
         return $value ? $this->trueResult : $this->falseResult;
     }
 
-    public function search(QueryBuilder $builder, string $query): QueryBuilder
+    public function search(QueryBuilder $builder, string $query): ?Comparison
     {
-        return $builder;
+        //get root alias
+        $alias = $builder->getRootAliases()[0];
+
+        //generate unique key for search
+        $key = "search_$this".rand(9,999);
+
+        //where in bool
+        $expr = $builder->expr()->eq("$alias.$this->data",":$key");
+        if($query=='true'||$query==$this->trueResult){
+            $param = true;
+        }
+        elseif($query=='false'||$query==$this->falseResult){
+            $param = false;
+        }
+        else{
+            return null;
+        }
+        $builder->setParameter($key,$param);
+        return $expr;
     }
 }

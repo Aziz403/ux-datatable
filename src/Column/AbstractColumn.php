@@ -11,6 +11,7 @@
 
 namespace Aziz403\UX\Datatable\Column;
 
+use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
 use Twig\Environment;
 
@@ -40,7 +41,17 @@ abstract class AbstractColumn
 
     abstract public function render($entity,$value);
 
-    abstract public function search(QueryBuilder $builder,string $query) :QueryBuilder;
+    abstract public function search(QueryBuilder $builder,string $query) :?Comparison;
+
+    public function order(QueryBuilder $builder,string $dir) :QueryBuilder
+    {
+        //get root alias
+        $alias = $builder->getRootAliases()[0];
+
+        $builder->addOrderBy("$alias.$this",$dir);
+
+        return $builder;
+    }
 
     /**
      * @return string

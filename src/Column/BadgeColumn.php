@@ -11,6 +11,7 @@
 
 namespace Aziz403\UX\Datatable\Column;
 
+use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -50,8 +51,12 @@ class BadgeColumn extends AbstractColumn
         return "<span class='datatable-badge' style='background-color: $color'>$value</span>";
     }
 
-    public function search(QueryBuilder $builder, string $query): QueryBuilder
+    public function search(QueryBuilder $builder, string $query): Comparison
     {
-        return $builder;
+        //get root alias
+        $alias = $builder->getRootAliases()[0];
+
+        //where in badge text
+        return $builder->expr()->like("$alias.$this->data","'%$query%'");
     }
 }

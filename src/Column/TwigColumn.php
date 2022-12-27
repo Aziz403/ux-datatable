@@ -11,6 +11,7 @@
 
 namespace Aziz403\UX\Datatable\Column;
 
+use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -33,8 +34,8 @@ class TwigColumn extends AbstractColumn
         ]);
     }
 
-    public function search(QueryBuilder $builder, string $query): QueryBuilder
+    public function search(QueryBuilder $builder, string $query): ?Comparison
     {
-        return $builder;
+        return null;
     }
 }
