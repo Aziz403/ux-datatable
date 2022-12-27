@@ -27,18 +27,15 @@ class BadgeColumn extends AbstractColumn
     private string $trueColor;
     private string $falseColor;
 
-    public function __construct(string $field,string $trueColor = self::COLOR_PRIMARY,string $falseColor = self::COLOR_DEFAULT,?callable $render = null,?string $display = null,bool $visible = true,bool $orderable = true)
+    public function __construct(string $field,string $trueColor = self::COLOR_PRIMARY,string $falseColor = self::COLOR_DEFAULT,?callable $render = null,?string $displayName = null,bool $visible = true,bool $orderable = true)
     {
-        $this->data = $field;
+        parent::__construct($field,$displayName,$visible,$orderable);
         $this->trueColor = $trueColor;
         $this->falseColor = $falseColor;
-        $this->text = $display ?? $field;
-        $this->visible = $visible;
-        $this->orderable = $orderable;
         $this->render = $render;
     }
 
-    public function render(string $value) :string
+    public function render($entity,$value) :string
     {
         if($this->render && is_callable($this->render)){
             //get badge color base on condition
@@ -49,15 +46,5 @@ class BadgeColumn extends AbstractColumn
             $color = $value ? $this->trueColor : $this->falseColor;
         }
         return "<span class='datatable-badge' style='background-color: $color'>$value</span>";
-    }
-
-    public function build()
-    {
-        return [
-            'data' => $this->data,
-            'text' => $this->text,
-            'visible' => $this->visible,
-            'orderable' => $this->orderable
-        ];
     }
 }

@@ -6,25 +6,17 @@ class InlineTwigColumn extends AbstractColumn
 {
     private string $template;
 
-    public function __construct(string $field,string $template,string $display = null, $visible = true,bool $orderable = true)
+    public function __construct(string $field,string $template,?string $displayName = null, $visible = true,bool $orderable = true)
     {
-        $this->data = $field;
+        parent::__construct($field,$displayName,$visible,$orderable);
         $this->template = $template;
-        $this->text = $display ?? $field;
-        $this->visible = $visible;
-        $this->orderable = $orderable;
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate(): string
+    public function render($entity, $value)
     {
-        return $this->template;
-    }
-
-    public function build()
-    {
-        // TODO: Implement build() method.
+        return $this->environment->render("@Datatable/column/inline_twig.html.twig",[
+            'inline_template' => $this->template,
+            'entity' => $entity
+        ]);
     }
 }

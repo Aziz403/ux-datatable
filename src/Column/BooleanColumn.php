@@ -8,18 +8,15 @@ class BooleanColumn extends AbstractColumn
     private string $falseResult;
     private $render;
 
-    public function __construct(string $field,string $trueResult = "Yes",string $falseResult = "No",?string $display = null,bool $visible = true,bool $orderable = true,?callable $render = null)
+    public function __construct(string $field,string $trueResult = "Yes",string $falseResult = "No",?string $displayName = null,bool $visible = true,bool $orderable = true,?callable $render = null)
     {
-        $this->data = $field;
+        parent::__construct($field,$displayName,$visible,$orderable);
         $this->trueResult = $trueResult;
         $this->falseResult = $falseResult;
-        $this->text = $display ?? $field;
-        $this->visible = $visible;
-        $this->orderable = $orderable;
         $this->render = $render;
     }
 
-    public function render(?bool $value) :string
+    public function render($entity,$value) :string
     {
         //check if has custom render condition
         if($this->render && is_callable($this->render)){
@@ -27,10 +24,5 @@ class BooleanColumn extends AbstractColumn
         }
         //return the same result
         return $value ? $this->trueResult : $this->falseResult;
-    }
-
-    public function build()
-    {
-        // TODO: Implement build() method.
     }
 }

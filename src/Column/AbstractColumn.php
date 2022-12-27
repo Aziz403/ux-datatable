@@ -11,6 +11,8 @@
 
 namespace Aziz403\UX\Datatable\Column;
 
+use Twig\Environment;
+
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
  */
@@ -21,7 +23,17 @@ abstract class AbstractColumn
     protected bool $visible;
     protected bool $orderable;
 
-    abstract public function build();
+    protected Environment $environment;
+
+    public function __construct(string $data,?string $text,bool $visible,bool $orderable)
+    {
+        $this->data = $data;
+        $this->text = $text ?? $data;
+        $this->visible = $visible;
+        $this->orderable = $orderable;
+    }
+
+    abstract public function render($entity,$value);
 
     /**
      * @return string
@@ -37,6 +49,15 @@ abstract class AbstractColumn
     public function getData(): string
     {
         return $this->data;
+    }
+
+    /**
+     * Used inside render method in TwigColumn to render view
+     * @param Environment $environment
+     */
+    public function setEnvironment(Environment $environment): void
+    {
+        $this->environment = $environment;
     }
 
     public function __toString()

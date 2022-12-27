@@ -25,37 +25,34 @@ class EntityColumn extends AbstractColumn
     private $render;
     private string $joinType;
 
-    public function __construct(string $entity,?string $field = null,?string $display = null,$render = null,?string $nullValue = null,string $joinType = self::ENTITY_LEFT_JOIN,bool $visible = true,bool $orderable = true)
+    public function __construct(string $entity,?string $field = null,?string $displayName = null,$render = null,?string $nullValue = null,string $joinType = self::ENTITY_LEFT_JOIN,bool $visible = true,bool $orderable = true)
     {
-        $this->data = $entity;
+        parent::__construct($entity,$displayName,$visible,$orderable);
         $this->entity = $entity;
         $this->field = $field;
-        $this->text = $display ?? $this->data;
-        $this->visible = $visible;
-        $this->orderable = $orderable;
         $this->nullValue = $nullValue;
         $this->render = $render;
         $this->joinType = $joinType;
     }
 
-    public function render($entity) :?string
+    public function render($entity,$value) :?string
     {
-        if(!$entity){
+        if(!$value){
             return "$this->nullValue";
         }
         //check if has custom render condition
         if($this->render && is_callable($this->render)){
-            return call_user_func($this->render,$entity);
+            return call_user_func($this->render,$value);
         }
         //else check if has specific field to display
         if($this->field){
-            $method = [$entity,"get".ucfirst($this->field)];
+            $method = [$value,"get".ucfirst($this->field)];
             if(is_callable($method)){
                 return call_user_func_array($method,[]);
             }
         }
         //return __toString result
-        return "$entity";
+        return "$value";
     }
 
     /**
@@ -80,15 +77,5 @@ class EntityColumn extends AbstractColumn
     public function getJoinType(): string
     {
         return $this->joinType;
-    }
-
-    public function build()
-    {
-        return [
-            'data' => $this->data,
-            'text' => $this->text,
-            'visible' => $this->visible,
-            'orderable' => $this->orderable
-        ];
     }
 }

@@ -18,16 +18,13 @@ class TextColumn extends AbstractColumn
 {
     private $render;
 
-    public function __construct(string $field,?string $display = null,bool $visible = true,bool $orderable = true,$render = null)
+    public function __construct(string $field,?string $displayName = null,bool $visible = true,bool $orderable = true,$render = null)
     {
-        $this->data = $field;
-        $this->text = $display ?? $field;
-        $this->visible = $visible;
-        $this->orderable = $orderable;
+        parent::__construct($field,$displayName,$orderable,$visible);
         $this->render = $render;
     }
 
-    public function render(string $value) :string
+    public function render($entity,$value) :string
     {
         //check if has custom render condition
         if($this->render && is_callable($this->render)){
@@ -35,15 +32,5 @@ class TextColumn extends AbstractColumn
         }
         //return the same result
         return $value;
-    }
-
-    public function build()
-    {
-        return [
-            'data' => $this->data,
-            'text' => $this->text,
-            'visible' => $this->visible,
-            'orderable' => $this->orderable
-        ];
     }
 }

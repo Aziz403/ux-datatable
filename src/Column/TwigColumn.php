@@ -18,31 +18,16 @@ class TwigColumn extends AbstractColumn
 {
     private string $template;
 
-    public function __construct(string $field,string $template,?string $display = null, $visible = true,bool $orderable = true)
+    public function __construct(string $field,string $template,?string $displayName = null, $visible = true,bool $orderable = true)
     {
-        $this->data = $field;
+        parent::__construct($field, $displayName, $visible, $orderable);
         $this->template = $template;
-        $this->text = $display ?? $field;
-        $this->visible = $visible;
-        $this->orderable = $orderable;
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate(): string
+    public function render($entity,$value) :string
     {
-        return $this->template;
-    }
-
-    public function build()
-    {
-        return [
-            'data' => $this->data,
-            'template' => $this->template,
-            'text' => $this->text,
-            'visible' => $this->visible,
-            'orderable' => $this->orderable
-        ];
+        return $this->environment->render($this->template,[
+            'entity' => $entity
+        ]);
     }
 }

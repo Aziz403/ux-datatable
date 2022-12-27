@@ -11,14 +11,6 @@
 
 namespace Aziz403\UX\Datatable\Helper;
 
-use Aziz403\UX\Datatable\Column\BadgeColumn;
-use Aziz403\UX\Datatable\Column\BooleanColumn;
-use Aziz403\UX\Datatable\Column\CustomColumn;
-use Aziz403\UX\Datatable\Column\DateColumn;
-use Aziz403\UX\Datatable\Column\EntityColumn;
-use Aziz403\UX\Datatable\Column\InlineTwigColumn;
-use Aziz403\UX\Datatable\Column\TextColumn;
-use Aziz403\UX\Datatable\Column\TwigColumn;
 use Aziz403\UX\Datatable\Model\EntityDatatable;
 use Twig\Environment;
 
@@ -65,32 +57,8 @@ class DatatableTemplatingHelper
                 }
 
                 //add special parts to each column value base on column type
-                if($column instanceof TextColumn){
-                    $value = $column->render($value);
-                }
-                if($column instanceof BadgeColumn){
-                    $value = $column->render($value);
-                }
-                elseif($column instanceof DateColumn){
-                    $value = $column->render($value);
-                }
-                elseif($column instanceof BooleanColumn){
-                    $value = $column->render($value);
-                }
-                elseif($column instanceof EntityColumn){
-                    $value = $column->render($value);
-                }
-                elseif($column instanceof TwigColumn){
-                    $value = $this->environment->render($column->getTemplate(),[
-                        'entity' => $item
-                    ]);
-                }
-                elseif($column instanceof InlineTwigColumn){
-                    $value = $this->environment->render("@Datatable/column/inline_twig.html.twig",[
-                        'inline_template' => $column->getTemplate(),
-                        'entity' => $item
-                    ]);
-                }
+                $column->setEnvironment($this->environment);
+                $value = $column->render($item,$value);
                 $row[$index] = "$value";
             }
             $result[] = $row;

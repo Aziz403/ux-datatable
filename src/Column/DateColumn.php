@@ -7,17 +7,14 @@ class DateColumn extends AbstractColumn
     private ?string $format;
     private $render;
 
-    public function __construct(string $field,?string $format = "Y-m-d",?string $display = null,bool $visible = true,bool $orderable = true,?callable $render = null)
+    public function __construct(string $field,?string $format = "Y-m-d",?string $displayName = null,bool $visible = true,bool $orderable = true,?callable $render = null)
     {
-        $this->data = $field;
+        parent::__construct($field,$displayName,$visible,$orderable);
         $this->format = $format;
-        $this->text = $display ?? $field;
-        $this->visible = $visible;
-        $this->orderable = $orderable;
         $this->render = $render;
     }
 
-    public function render($value) :string
+    public function render($entity,$value) :string
     {
         //check if has custom render condition
         if($this->render && is_callable($this->render)){
@@ -25,10 +22,5 @@ class DateColumn extends AbstractColumn
         }
         //else render using format
         return $value->format($this->format);
-    }
-
-    public function build()
-    {
-        // TODO: Implement build() method.
     }
 }
