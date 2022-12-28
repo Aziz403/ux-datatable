@@ -1,6 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 import DataTables from "datatables.net";
 
+/* stimulusFetch: 'lazy' */
 export default class extends Controller {
     static values = {
         view: Object
@@ -15,7 +16,7 @@ export default class extends Controller {
         const { path, options } = this.viewValue;
         let datatableId = '#'+this.element.id;
 
-        this._dispatchEvent('datatable:pre-connect', { path, options , datatableId });
+        this._dispatchEvent('datatable:before-connect', { path, options , datatableId });
 
         //check if datatable already exists
         if(DataTables.isDataTable(datatableId)){
@@ -28,6 +29,9 @@ export default class extends Controller {
 
         // destroy table when return by cache (in ux-turbo)
         document.addEventListener("turbo:before-cache", ()=> {
+
+            this._dispatchEvent('datatable:before-cache', { table: this.table , datatableId });
+
             if(document.querySelectorAll(datatableId+'_wrapper').length === 1){
                 this.table.destroy()
             }

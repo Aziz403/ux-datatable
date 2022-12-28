@@ -1,6 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 import DataTables from "datatables.net"
 
+/* stimulusFetch: 'lazy' */
 export default class extends Controller {
     static values = {
         view: Object

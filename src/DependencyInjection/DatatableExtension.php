@@ -29,11 +29,16 @@ class DatatableExtension extends Extension
 
     public function load(array $configs, ContainerBuilder $container)
     {
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
         if(class_exists(Environment::class)) {
             $container
                 ->setDefinition('datatable.builder', new Definition(DatatableBuilder::class))
                 ->addArgument(new Reference('doctrine.orm.default_entity_manager'))
-                ->addArgument(new Reference('twig'));
+                ->addArgument(new Reference('twig'))
+                ->addArgument(new Reference('translator.default'))
+                ->addArgument($config);
             $container
                 ->setAlias(DatatableBuilderInterface::class, 'datatable.builder');
         }

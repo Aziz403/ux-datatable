@@ -19,6 +19,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
@@ -35,6 +36,10 @@ class EntityDatatable extends AbstractDatatable
     private ?string $path;
     private array $columns;
 
+    private string $language;
+    private bool $isLocalLangTrans;
+    private TranslatorInterface $translator;
+
     private ?Criteria $criteria = null;
 
     private ?Request $request = null;
@@ -42,14 +47,34 @@ class EntityDatatable extends AbstractDatatable
     private DatatableQueriesHelper $queriesService;
     private DatatableTemplatingHelper $templatingService;
 
-    public function __construct(string $className,EntityRepository $repository,Environment $environment)
+    public function __construct(
+        string $className,
+        EntityRepository $repository,
+        Environment $environment,
+        TranslatorInterface $translator,
+        array $config
+    )
     {
         $this->className = $className;
         $this->columns = [];
+        $this->attributes['id'] = "table".random_int(9,999);
+
+        $this->options = array_merge(self::DEFAULT_DATATABLE_OPTIONS,$config['options']);
+        $this->language = $config['language'];
+        $this->isLocalLangTrans = !$config['language_from_cdn'];
+
+        if(isset($config['template_parameters'])){
+            if(isset($config['template_parameters']['style'])){
+
+            }
+            if(isset($config['template_parameters']['className'])){
+                $this->attributes['class'] = $config['template_parameters']['className'];
+            }
+        }
+
+        $this->translator = $translator;
         $this->queriesService = new DatatableQueriesHelper($repository,$this);
         $this->templatingService = new DatatableTemplatingHelper($environment,$this);
-        $this->options = self::DEFAULT_DATATABLE_OPTIONS;
-        $this->attributes['id'] = "table".random_int(9,999);
     }
 
     /**
@@ -175,6 +200,76 @@ class EntityDatatable extends AbstractDatatable
     }
 
     /**
+     * @return array
+     */
+    public function getLanguageData(): array
+    {
+        if (!$this->isLocalLangTrans) {
+            return ['url' => '//cdn.datatables.net/plug-ins/1.10.15/i18n/' . $this->language];
+        }
+
+        return [
+            'processing' => $this->translator->trans('datatable.datatable.processing'),
+            'search' => $this->translator->trans('datatable.datatable.search'),
+            'lengthMenu' => $this->translator->trans('datatable.datatable.lengthMenu'),
+            'info' => $this->translator->trans('datatable.datatable.info'),
+            'infoEmpty' => $this->translator->trans('datatable.datatable.infoEmpty'),
+            'infoFiltered' => $this->translator->trans('datatable.datatable.infoFiltered'),
+            'infoPostFix' => $this->translator->trans('datatable.datatable.infoPostFix'),
+            'loadingRecords' => $this->translator->trans('datatable.datatable.loadingRecords'),
+            'zeroRecords' => $this->translator->trans('datatable.datatable.zeroRecords'),
+            'emptyTable' => $this->translator->trans('datatable.datatable.emptyTable'),
+            'searchPlaceholder' => $this->translator->trans('datatable.datatable.searchPlaceholder'),
+            'paginate' => [
+                'first' => $this->translator->trans('datatable.datatable.paginate.first'),
+                'previous' => $this->translator->trans('datatable.datatable.paginate.previous'),
+                'next' => $this->translator->trans('datatable.datatable.paginate.next'),
+                'last' => $this->translator->trans('datatable.datatable.paginate.last'),
+            ],
+            'aria' => [
+                'sortAscending' => $this->translator->trans('datatable.datatable.aria.sortAscending'),
+                'sortDescending' => $this->translator->trans('datatable.datatable.aria.sortDescending'),
+            ],
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param string $language
+     */
+    public function setLanguage(string $language): self
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLocalLangTrans(): bool
+    {
+        return $this->isLocalLangTrans;
+    }
+
+    /**
+     * @param bool $isLocalLangTrans
+     */
+    public function setIsLocalLangTrans(bool $isLocalLangTrans): self
+    {
+        $this->isLocalLangTrans = $isLocalLangTrans;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isSubmitted():bool
@@ -191,8 +286,11 @@ class EntityDatatable extends AbstractDatatable
     public function createView(): array
     {
         return [
-            "path" => $this->path ?? 'null',
-            "options" => $this->options,
+            "path" => $this->path,
+            "options" => array_merge(
+                $this->options,
+                ["language" => $this->getLanguageData()]
+            )
         ];
     }
 

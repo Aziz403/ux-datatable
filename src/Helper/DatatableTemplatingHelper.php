@@ -11,7 +11,6 @@
 
 namespace Aziz403\UX\Datatable\Helper;
 
-use Aziz403\UX\Datatable\Column\EntityColumn;
 use Aziz403\UX\Datatable\Model\EntityDatatable;
 use Aziz403\UX\Datatable\Service\DataService;
 use Twig\Environment;
