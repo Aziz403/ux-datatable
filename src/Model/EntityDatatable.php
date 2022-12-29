@@ -65,7 +65,7 @@ class EntityDatatable extends AbstractDatatable
 
         if(isset($config['template_parameters'])){
             if(isset($config['template_parameters']['style'])){
-
+                $this->attributes['data-styling-choicer'] = $config['template_parameters']['style'];
             }
             if(isset($config['template_parameters']['className'])){
                 $this->attributes['class'] = $config['template_parameters']['className'];
@@ -205,7 +205,7 @@ class EntityDatatable extends AbstractDatatable
     public function getLanguageData(): array
     {
         if (!$this->isLocalLangTrans) {
-            return ['url' => '//cdn.datatables.net/plug-ins/1.10.15/i18n/' . $this->language];
+            return ['url' => "//cdn.datatables.net/plug-ins/1.10.15/i18n/$this->language.json"];
         }
 
         return [

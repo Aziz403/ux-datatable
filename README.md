@@ -4,6 +4,8 @@ Symfony UX Datatables.net
 Symfony UX Datatables.net is a Symfony bundle integrating the
 `Datatables.net` library in Symfony applications.
 
+![Datatable Example](/docs/images/datatable-example.png?raw=true)
+
 Installation
 ------------
 
@@ -27,5 +29,5 @@ in your ``package.json`` file.
 Documentation
 -----
 
-The documentation is rendered [here](https://github.com/Aziz403/ux-datatable/tree/1.x/docs).\
+The documentation is rendered [here](https://github.com/Aziz403/ux-datatable/blob/1.x/docs/index.md).\
 The source of the documentation is available in the /docs folder.

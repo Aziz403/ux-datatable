@@ -15,7 +15,10 @@
                 "main": "controllers/entity_controller.js",
                 "webpackMode": "eager",
                 "fetch": "eager",
-                "enabled": true
+                "enabled": true,
+                "autoimport": {
+                    "@aziz403/ux-datatablejs/css/style.css": true
+                }
             }
         }
     },

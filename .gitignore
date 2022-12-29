@@ -2,3 +2,6 @@
 .phpunit.result.cache
 .php_cs.cache
 composer.lock
+phpunit.xml
+yarn.lock
+/node_modules

@@ -39,7 +39,9 @@
     "symfony/framework-bundle": "^4.4.17|^5.0|^6.0",
     "symfony/phpunit-bridge": "^5.2|^6.0",
     "symfony/twig-bundle": "^4.4.17|^5.0|^6.0",
-    "symfony/webpack-encore-bundle": "^1.11"
+    "symfony/webpack-encore-bundle": "^1.11",
+    "phpunit/phpunit": "^9.5",
+    "symfony/test-pack": "^1.0"
   },
   "conflict": {
     "symfony/flex": "<1.13",
