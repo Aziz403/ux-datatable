@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import DataTables from "datatables.net";
+import DataTable from "datatables.net";
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
@@ -16,23 +16,15 @@ export default class extends Controller {
         const { path, options } = this.viewValue;
         let datatableId = '#'+this.element.id;
 
-        let theme = this.element.getAttribute("data-styling-choicer");
-        console.log("gere1",theme);
-        if(theme!=="none"){
-            console.log("gere2",theme);
-            import("../datatable-styling/js/dataTables."+theme);
-            import("../datatable-styling/css/dataTables."+theme+".css");
-        }
-
         this._dispatchEvent('datatable:before-connect', { path, options , datatableId });
 
         //check if datatable already exists
-        if(DataTables.isDataTable(datatableId)){
-            this.table = new DataTables(datatableId);
+        if(DataTable.isDataTable(datatableId)){
+            this.table = new DataTable(datatableId);
         }
         //configuration the table
         else{
-            this.table = new DataTables(datatableId, options);
+            this.table = new DataTable(datatableId, options);
         }
 
         // destroy table when return by cache (in ux-turbo)

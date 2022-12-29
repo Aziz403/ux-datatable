@@ -2,7 +2,7 @@
   "name": "aziz403/ux-datatablejs",
   "type": "symfony-bundle",
   "description": "Datatable.net integration for Symfony",
-  "homepage": "https://symfony.com",
+  "version": "1.0.5",
   "keywords": [
     "symfony",
     "symfony-ux",
@@ -46,6 +46,5 @@
   "conflict": {
     "symfony/flex": "<1.13",
     "symfony/webpack-encore-bundle": "<1.11"
-  },
-  "version": "1.0.4"
+  }
 }

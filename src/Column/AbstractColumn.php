@@ -45,11 +45,10 @@ abstract class AbstractColumn
 
     public function order(QueryBuilder $builder,string $dir) :QueryBuilder
     {
-        //get root alias
-        $alias = $builder->getRootAliases()[0];
-
-        $builder->addOrderBy("$alias.$this",$dir);
-
+        if($this->orderable){
+            $alias = $builder->getRootAliases()[0];
+            $builder->addOrderBy("$alias.$this",$dir);
+        }
         return $builder;
     }
 

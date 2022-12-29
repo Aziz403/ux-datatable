@@ -48,7 +48,7 @@ class Configuration implements ConfigurationInterface
                     ->ignoreExtraKeys()
                     ->children()
                         ->enumNode('style')
-                            ->values(['none','bootstrap','bootstrap4','foundation','material','uikit','semanticui','jqueryui'])
+                            ->values(['none','bootstrap3','bootstrap4','bootstrap5','foundation','bulma','jqueryui'])
                             ->info('Default Datatables style')
                             ->defaultValue('bootstrap5')
                         ->end()

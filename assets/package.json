@@ -2,23 +2,59 @@
     "name": "@aziz403/ux-datatablejs",
     "description": "Datatable.net integration for Symfony",
     "license": "MIT",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "symfony": {
         "controllers": {
             "simple_datatable": {
                 "main": "controllers/simple_controller.js",
-                "webpackMode": "eager",
-                "fetch": "eager",
+                "webpackMode": "lazy",
+                "fetch": "lazy",
                 "enabled": true
             },
             "entity_datatable": {
                 "main": "controllers/entity_controller.js",
-                "webpackMode": "eager",
-                "fetch": "eager",
+                "webpackMode": "lazy",
+                "fetch": "lazy",
                 "enabled": true,
                 "autoimport": {
                     "@aziz403/ux-datatablejs/css/style.css": true
                 }
+            },
+            "styling_bootstrap3": {
+                "main": "controllers/styling/bootstrap3_controller.js",
+                "webpackMode": "lazy",
+                "fetch": "lazy",
+                "enabled": true
+            },
+            "styling_bootstrap4": {
+                "main": "controllers/styling/bootstrap4_controller.js",
+                "webpackMode": "lazy",
+                "fetch": "lazy",
+                "enabled": true
+            },
+            "styling_bootstrap5": {
+                "main": "controllers/styling/bootstrap5_controller.js",
+                "webpackMode": "lazy",
+                "fetch": "lazy",
+                "enabled": true
+            },
+            "styling_bulma": {
+                "main": "controllers/styling/bulma_controller.js",
+                "webpackMode": "lazy",
+                "fetch": "lazy",
+                "enabled": true
+            },
+            "styling_foundation": {
+                "main": "controllers/styling/foundation_controller.js",
+                "webpackMode": "lazy",
+                "fetch": "lazy",
+                "enabled": true
+            },
+            "styling_jqueryui": {
+                "main": "controllers/styling/jqueryui_controller.js",
+                "webpackMode": "lazy",
+                "fetch": "lazy",
+                "enabled": true
             }
         }
     },
@@ -33,5 +69,13 @@
         "datatables.net": "^1.12.1",
         "datatables.net-dt": "^1.12.1",
         "jquery": "^3.6.1"
+    },
+    "dependencies": {
+        "datatables.net-bm": "^1.13.1",
+        "datatables.net-bs": "^1.13.1",
+        "datatables.net-bs4": "^1.13.1",
+        "datatables.net-bs5": "^1.13.1",
+        "datatables.net-jqui": "^1.13.1",
+        "datatables.net-zf": "^1.13.1"
     }
 }

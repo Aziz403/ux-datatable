@@ -44,10 +44,19 @@ class DatatableExtension extends AbstractExtension
         $controllers = [];
         $html = "<table ";
 
+        //add theme (before main controller)
+        if(($theme = $datatable->getThemeStyling())!='none'){
+            $controllers['@aziz403/ux-datatablejs/styling_'.$theme] = [];
+        }
+
+        //add custom controller if exists
         if ($datatable->getDataController()) {
             $controllers[$datatable->getDataController()] = [];
         }
+
+        //add main controller
         $controllers['@aziz403/ux-datatablejs/entity_datatable'] = ['view' => $datatable->createView()];
+
         if (class_exists(StimulusControllersDto::class)) {
             $dto = new StimulusControllersDto($env);
             foreach ($controllers as $controllerName => $controllerValues) {

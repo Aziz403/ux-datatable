@@ -270,6 +270,14 @@ class EntityDatatable extends AbstractDatatable
     }
 
     /**
+     * @return mixed
+     */
+    public function getThemeStyling()
+    {
+        return $this->attributes['data-styling-choicer'];
+    }
+
+    /**
      * @return bool
      */
     public function isSubmitted():bool
