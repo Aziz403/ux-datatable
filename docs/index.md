@@ -11,7 +11,7 @@ Before you start, make sure you have `Symfony UX configured in your app`.
 
 Then, install this bundle using Composer and Symfony Flex:
 
-    $ composer require aziz403/ux-datatablejs
+    $ composer require aziz403/ux-datatable
 
     # Don't forget to install the JavaScript dependencies as well and compile
     $ npm install --force
@@ -62,7 +62,7 @@ Once created in PHP, a datatable can be displayed using Twig if installed
 (requires `Symfony Webpack Encore`):
 
     {# home/index.html.twig #}
-    <table {{ stimulus_controller('@aziz403/ux-datatablejs',datatable) }}>
+    <table {{ stimulus_controller('@aziz403--ux-datatable--simple_datatable',datatable) }}>
         {# table body: the content of table body based of what you want do, check Datatables.net for more details #}
     </table>
 
@@ -105,7 +105,7 @@ Also can you use your custom stimulus controller to create datatable :
 and use the controller in twig template by :
 
     {# home/index.html.twig #}
-    <table {{ stimulus_controller('@aziz403/ux-datatablejs mydatatable',datatable) }}>
+    <table {{ stimulus_controller('@aziz403--ux-datatable--simple_datatable mydatatable',datatable) }}>
         {# table body: the content of table body based of what you want do, check Datatables.net for more details #}
     </table>
 

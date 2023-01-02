@@ -17,7 +17,7 @@
                 "fetch": "lazy",
                 "enabled": true,
                 "autoimport": {
-                    "@aziz403/ux-datatablejs/css/style.css": true
+                    "@aziz403/ux-datatable/css/style.css": true
                 }
             },
             "styling_bootstrap3": {
