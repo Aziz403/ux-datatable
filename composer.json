@@ -1,5 +1,5 @@
 {
-  "name": "aziz403/ux-datatablejs",
+  "name": "aziz403/ux-datatable",
   "type": "symfony-bundle",
   "description": "Datatable.net integration for Symfony",
   "version": "1.0.5",
@@ -31,17 +31,22 @@
     "symfony/config": "^4.4.17|^5.0|^6.0",
     "symfony/dependency-injection": "^4.4.17|^5.0|^6.0",
     "symfony/http-kernel": "^4.4.17|^5.0|^6.0",
+    "symfony/framework-bundle": "^4.4.17|^5.0|^6.0",
     "doctrine/doctrine-bundle": "~2.6",
     "doctrine/orm": "~2.13",
-    "phpoffice/phpspreadsheet": "^1.25"
+    "symfony/twig-bundle": "^4.4.17|^5.0|^6.0",
+    "symfony/webpack-encore-bundle": "^1.11"
   },
   "require-dev": {
     "symfony/framework-bundle": "^4.4.17|^5.0|^6.0",
-    "symfony/phpunit-bridge": "^5.2|^6.0",
     "symfony/twig-bundle": "^4.4.17|^5.0|^6.0",
     "symfony/webpack-encore-bundle": "^1.11",
+    "doctrine/doctrine-bundle": "~2.6",
+    "doctrine/doctrine-fixtures-bundle": "^3.4",
     "phpunit/phpunit": "^9.5",
-    "symfony/test-pack": "^1.0"
+    "symfony/phpunit-bridge": "^5.2|^6.0",
+    "symfony/test-pack": "^1.0",
+    "ext-json": "*"
   },
   "conflict": {
     "symfony/flex": "<1.13",
