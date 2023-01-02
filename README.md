@@ -13,7 +13,7 @@ Before you start, make sure you have `Symfony UX configured in your app`.
 
 Then, install this bundle using Composer and Symfony Flex:
 
-    $ composer require aziz403/ux-datatablejs
+    $ composer require aziz403/ux-datatable
 
     # Don't forget to install the JavaScript dependencies as well and compile
     $ npm install --force
