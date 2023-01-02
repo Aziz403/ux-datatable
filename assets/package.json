@@ -1,5 +1,5 @@
 {
-    "name": "@aziz403/ux-datatablejs",
+    "name": "@aziz403/ux-datatable",
     "description": "Datatable.net integration for Symfony",
     "license": "MIT",
     "version": "1.0.5",
