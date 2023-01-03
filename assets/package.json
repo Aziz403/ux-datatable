@@ -62,6 +62,12 @@
         "@hotwired/stimulus": "^3.0.0",
         "datatables.net": "^1.12.1",
         "datatables.net-dt": "^1.12.1",
+        "datatables.net-bm": "^1.13.1",
+        "datatables.net-bs": "^1.13.1",
+        "datatables.net-bs4": "^1.13.1",
+        "datatables.net-bs5": "^1.13.1",
+        "datatables.net-jqui": "^1.13.1",
+        "datatables.net-zf": "^1.13.1",
         "jquery": "^3.6.1"
     },
     "devDependencies": {
@@ -69,13 +75,5 @@
         "datatables.net": "^1.12.1",
         "datatables.net-dt": "^1.12.1",
         "jquery": "^3.6.1"
-    },
-    "dependencies": {
-        "datatables.net-bm": "^1.13.1",
-        "datatables.net-bs": "^1.13.1",
-        "datatables.net-bs4": "^1.13.1",
-        "datatables.net-bs5": "^1.13.1",
-        "datatables.net-jqui": "^1.13.1",
-        "datatables.net-zf": "^1.13.1"
     }
 }
