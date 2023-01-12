@@ -32,6 +32,8 @@ class DatatableExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('datatable.config', $config);
+
         if(class_exists(Environment::class)) {
             $container
                 ->setDefinition('datatable.builder', new Definition(DatatableBuilder::class))

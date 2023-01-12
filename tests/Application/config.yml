@@ -1,0 +1,55 @@
+imports:
+  - { resource: services.yml }
+
+framework:
+  annotations:
+    enabled: true
+  secret: '$ecret'
+  router:
+    utf8: true
+    resource: '%kernel.project_dir%/routing.yml'
+    strict_requirements: ~
+  default_locale: 'en'
+  fragments: ~
+  translator: { fallbacks: [] }
+  http_method_override: true
+  test: ~
+  profiler:
+    collect: false
+  cache:
+    pools:
+      doctrine.result_cache_pool:
+        adapter: cache.app
+      doctrine.system_cache_pool:
+        adapter: cache.system
+
+doctrine:
+  dbal:
+    driver: pdo_sqlite
+    path: '%kernel.project_dir%/data.sqlite'
+
+  orm:
+    auto_generate_proxy_classes: '%kernel.debug%'
+    naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+    auto_mapping: true
+    query_cache_driver:
+      type: pool
+      pool: doctrine.system_cache_pool
+    result_cache_driver:
+      type: pool
+      pool: doctrine.result_cache_pool
+
+twig:
+  debug: '%kernel.debug%'
+  strict_variables: '%kernel.debug%'
+  exception_controller: null
+
+webpack_encore:
+  output_path: '%kernel.project_dir%/public/build'
+
+datatable:
+  language_from_cdn: false
+  language: 'English'
+  template_parameters:
+    style: 'bootstrap5'
+    className: 'table table-bordered'
