@@ -290,6 +290,23 @@ class EntityDatatable extends AbstractDatatable
     }
 
     /**
+     * @return array
+     */
+    public function getColumnDefs(): array
+    {
+        $columnDefs = [];
+        /** @var AbstractColumn $column */
+        foreach ($this->columns as $column){
+            $columnDefs[] = [
+                'visible' => $column->isSearchable(),
+                'searchable' => $column->isVisible()
+            ];
+        }
+
+        return $columnDefs;
+    }
+
+    /**
      * @return bool
      */
     public function isSubmitted():bool
@@ -308,9 +325,12 @@ class EntityDatatable extends AbstractDatatable
         return [
             "path" => $this->path,
             "options" => array_merge(
-                $this->options,
+                array_merge(
+                    $this->options,
+                    ["columnDefs" => $this->getColumnDefs()]
+                ),
                 ["language" => $this->getLanguageData()]
-            )
+            ),
         ];
     }
 

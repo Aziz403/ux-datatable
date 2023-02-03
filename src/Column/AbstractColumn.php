@@ -79,6 +79,14 @@ abstract class AbstractColumn
     /**
      * @return bool
      */
+    public function isVisible(): bool
+    {
+        return $this->visible;
+    }
+
+    /**
+     * @return bool
+     */
     public function isMapped(): bool
     {
         return $this->mapped;
