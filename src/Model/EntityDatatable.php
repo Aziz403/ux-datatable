@@ -33,10 +33,13 @@ class EntityDatatable extends AbstractDatatable
     ];
 
     private string $className;
+
     private ?string $path;
     private array $columns;
 
     private string $language;
+
+    private string $globalController;
     private bool $isLocalLangTrans;
     private TranslatorInterface $translator;
 
@@ -62,13 +65,14 @@ class EntityDatatable extends AbstractDatatable
         $this->options = array_merge(self::DEFAULT_DATATABLE_OPTIONS,$config['options']);
         $this->language = $config['language'];
         $this->isLocalLangTrans = !$config['language_from_cdn'];
+        $this->globalController = $config['global_controller'] ?? null;
 
         if(isset($config['template_parameters'])){
             if(isset($config['template_parameters']['style'])){
                 $this->attributes['data-styling-choicer'] = $config['template_parameters']['style'];
             }
             if(isset($config['template_parameters']['className'])){
-                $this->attributes['class'] = $config['template_parameters']['className'];
+                $this->className .= ' '.$config['template_parameters']['className'];
             }
         }
 
@@ -275,6 +279,14 @@ class EntityDatatable extends AbstractDatatable
     public function getThemeStyling()
     {
         return $this->attributes['data-styling-choicer'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getGlobalController(): string
+    {
+        return $this->globalController;
     }
 
     /**

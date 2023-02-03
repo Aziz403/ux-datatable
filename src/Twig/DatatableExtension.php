@@ -44,14 +44,19 @@ class DatatableExtension extends AbstractExtension
         $controllers = [];
         $html = "<table ";
 
-        //add theme (before main controller)
+        // add theme (before main controller)
         if(($theme = $datatable->getThemeStyling())!='none'){
             $controllers['@aziz403/ux-datatable/styling_'.$theme] = [];
         }
 
-        //add custom controller if exists
+        // add custom controller if exists
         if ($datatable->getDataController()) {
             $controllers[$datatable->getDataController()] = [];
+        }
+
+        // add global controller if exists
+        if($datatable->getGlobalController()){
+            $controllers[$datatable->getGlobalController()] = [];
         }
 
         //add main controller
