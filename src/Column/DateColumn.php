@@ -23,6 +23,11 @@ class DateColumn extends AbstractColumn
         if($this->render && is_callable($this->render)){
             return call_user_func($this->render,$value);
         }
+
+        if(!$value){
+            return '';
+        }
+
         //else render using format
         return $value->format($this->format);
     }
