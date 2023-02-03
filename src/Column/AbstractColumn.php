@@ -87,6 +87,14 @@ abstract class AbstractColumn
     /**
      * @return bool
      */
+    public function isOrderable(): bool
+    {
+        return $this->orderable;
+    }
+
+    /**
+     * @return bool
+     */
     public function isMapped(): bool
     {
         return $this->mapped;

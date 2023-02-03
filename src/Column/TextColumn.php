@@ -24,7 +24,7 @@ class TextColumn extends AbstractColumn
 
     public function __construct(string $field,?string $displayName = null,bool $visible = true,bool $orderable = true,$render = null,bool $searchable = true)
     {
-        parent::__construct($field,$displayName,$orderable,$visible,$searchable,true);
+        parent::__construct($field,$displayName,$visible,$orderable,$searchable,true);
         $this->render = $render;
     }
 

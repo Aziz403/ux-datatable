@@ -300,17 +300,30 @@ class EntityDatatable extends AbstractDatatable
     }
 
     /**
+     * @param string|null $globalController
+     * @return EntityDatatable
+     */
+    public function setGlobalController(?string $globalController): EntityDatatable
+    {
+        $this->globalController = $globalController;
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getColumnDefs(): array
     {
         $columnDefs = [];
+        $i = 0;
         /** @var AbstractColumn $column */
         foreach ($this->columns as $column){
-            $columnDefs[$column->getData()] = [
-                'visible' => $column->isSearchable(),
-                'searchable' => $column->isVisible()
+            $columnDefs[] = [
+                'targets' => $i,
+                'visible' => $column->isVisible(),
+                'orderable' => $column->isOrderable()
             ];
+            $i++;
         }
 
         return $columnDefs;
