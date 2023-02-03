@@ -42,7 +42,7 @@ class DatatableExtension extends AbstractExtension
         $datatable->setAttributes(array_merge($datatable->getAttributes(), $attributes));
 
         $controllers = [];
-        $html = "<table ";
+        $html = "<table class='{$datatable->getClassName()}' ";
 
         // add theme (before main controller)
         if(($theme = $datatable->getThemeStyling())!='none'){

@@ -21,7 +21,7 @@ class DateColumn extends AbstractColumn
     {
         //check if has custom render condition
         if($this->render && is_callable($this->render)){
-            return call_user_func($this->render,[$entity,$value]);
+            return call_user_func($this->render,$entity,$value);
         }
 
         if(!$value){

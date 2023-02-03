@@ -32,10 +32,10 @@ class TextColumn extends AbstractColumn
     {
         //check if has custom render condition
         if($this->render && is_callable($this->render)){
-            return call_user_func($this->render,[$entity,$value]);
+            return call_user_func($this->render,$entity,$value);
         }
         //return the same result
-        return $value;
+        return "$value";
     }
 
     public function search(QueryBuilder $builder, string $query): Comparison

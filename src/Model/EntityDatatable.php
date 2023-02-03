@@ -32,15 +32,15 @@ class EntityDatatable extends AbstractDatatable
         'serverSide' => true
     ];
 
-    private string $className;
+    private string $className = "";
 
     private ?string $path;
     private array $columns;
 
     private string $language;
 
-    private string $globalController;
-    private bool $isLocalLangTrans;
+    private ?string $globalController;
+    private bool $isLangFromCDN;
     private TranslatorInterface $translator;
 
     private ?Criteria $criteria = null;
@@ -64,7 +64,7 @@ class EntityDatatable extends AbstractDatatable
 
         $this->options = array_merge(self::DEFAULT_DATATABLE_OPTIONS,$config['options']);
         $this->language = $config['language'];
-        $this->isLocalLangTrans = !$config['language_from_cdn'];
+        $this->isLangFromCDN = $config['language_from_cdn'];
         $this->globalController = $config['global_controller'] ?? null;
 
         if(isset($config['template_parameters'])){
@@ -87,6 +87,16 @@ class EntityDatatable extends AbstractDatatable
     public function getClassName(): string
     {
         return $this->className;
+    }
+
+    /**
+     * @param string $className
+     * @return EntityDatatable
+     */
+    public function setClassName(string $className): EntityDatatable
+    {
+        $this->className = $className;
+        return $this;
     }
 
     /**
@@ -208,7 +218,7 @@ class EntityDatatable extends AbstractDatatable
      */
     public function getLanguageData(): array
     {
-        if (!$this->isLocalLangTrans) {
+        if ($this->isLangFromCDN) {
             return ['url' => "//cdn.datatables.net/plug-ins/1.10.15/i18n/$this->language.json"];
         }
 
@@ -258,17 +268,17 @@ class EntityDatatable extends AbstractDatatable
     /**
      * @return bool
      */
-    public function isLocalLangTrans(): bool
+    public function isLangFromCDN(): bool
     {
-        return $this->isLocalLangTrans;
+        return $this->isLangFromCDN;
     }
 
     /**
-     * @param bool $isLocalLangTrans
+     * @param bool $isLangFromCDN
      */
-    public function setIsLocalLangTrans(bool $isLocalLangTrans): self
+    public function setLangFromCDN(bool $isLangFromCDN): self
     {
-        $this->isLocalLangTrans = $isLocalLangTrans;
+        $this->isLangFromCDN = $isLangFromCDN;
 
         return $this;
     }
@@ -284,7 +294,7 @@ class EntityDatatable extends AbstractDatatable
     /**
      * @return string
      */
-    public function getGlobalController(): string
+    public function getGlobalController(): ?string
     {
         return $this->globalController;
     }
@@ -297,7 +307,7 @@ class EntityDatatable extends AbstractDatatable
         $columnDefs = [];
         /** @var AbstractColumn $column */
         foreach ($this->columns as $column){
-            $columnDefs[] = [
+            $columnDefs[$column->getData()] = [
                 'visible' => $column->isSearchable(),
                 'searchable' => $column->isVisible()
             ];

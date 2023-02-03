@@ -42,7 +42,7 @@ class BadgeColumn extends AbstractColumn
     {
         if($this->render && is_callable($this->render)){
             //get badge color base on condition
-            $color = call_user_func($this->render,[$entity,$value]);
+            $color = call_user_func($this->render,$entity,$value);
         }
         else{
             //get badge color from true&false colors
