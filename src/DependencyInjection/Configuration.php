@@ -35,7 +35,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('language')
                     ->info('Language of the Datatables (if language_from_cdn true)')
-                    ->defaultValue('English')
+                    ->defaultValue('en')
                 ->end()
                 ->scalarNode('global_controller')
                     ->info('Integrate a stimulus controller will be added to datatable_controller')

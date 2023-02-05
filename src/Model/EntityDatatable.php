@@ -13,6 +13,7 @@ namespace Aziz403\UX\Datatable\Model;
 
 use Aziz403\UX\Datatable\Column\AbstractColumn;
 use Aziz403\UX\Datatable\Column\TwigColumn;
+use Aziz403\UX\Datatable\Helper\Constants;
 use Aziz403\UX\Datatable\Helper\DatatableQueriesHelper;
 use Aziz403\UX\Datatable\Helper\DatatableTemplatingHelper;
 use Doctrine\Common\Collections\Criteria;
@@ -21,6 +22,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
+use const Aziz403\UX\Datatable\Helper\LANGUAGES;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
@@ -218,8 +220,12 @@ class EntityDatatable extends AbstractDatatable
      */
     public function getLanguageData(): array
     {
+        if ($this->language==null || $this->language=="request") {
+            $this->language = $this->request->getLocale();
+        }
+
         if ($this->isLangFromCDN) {
-            return ['url' => "//cdn.datatables.net/plug-ins/1.10.15/i18n/$this->language.json"];
+            return ['url' => "//cdn.datatables.net/plug-ins/1.10.15/i18n/{$this->getFullLanguage()}.json"];
         }
 
         return [
@@ -253,6 +259,18 @@ class EntityDatatable extends AbstractDatatable
     public function getLanguage(): string
     {
         return $this->language;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullLanguage(): string
+    {
+        if(!isset(Constants::LANGUAGES[$this->language])){
+            throw new \Exception(sprintf("The Language needs to be a shortcut and one of: %s, or 'request'",implode(",",array_keys(Constants::LANGUAGES))));
+        }
+
+        return Constants::LANGUAGES[$this->language];
     }
 
     /**
