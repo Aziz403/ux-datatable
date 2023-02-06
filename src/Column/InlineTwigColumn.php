@@ -19,11 +19,13 @@ class InlineTwigColumn extends AbstractColumn
 
     public function render($entity, $value)
     {
-        return $this->environment->render("@Datatable/column/inline_twig.html.twig",[
-            'inline_template' => $this->template,
+        return $this->environment
+            ->createTemplate($this->template)
+            ->render([
             'entity' => $entity,
             ...$this->params
-        ]);
+            ])
+        ;
     }
 
     public function search(QueryBuilder $builder, string $query): ?Comparison

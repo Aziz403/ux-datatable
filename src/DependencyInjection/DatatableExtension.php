@@ -51,9 +51,6 @@ class DatatableExtension extends Extension
                 ->setDefinition('datatable.twig_extension', new Definition(TwigDatatableExtension::class))
                 ->addArgument(new Reference('webpack_encore.twig_stimulus_extension'))
                 ->addTag('twig.extension');
-            $container
-                ->setDefinition('twig.extension.stringloader',new Definition(StringLoaderExtension::class))
-                ->addTag('twig.extension');
         }
     }
 }
