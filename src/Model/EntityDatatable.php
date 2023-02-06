@@ -13,6 +13,7 @@ namespace Aziz403\UX\Datatable\Model;
 
 use Aziz403\UX\Datatable\Column\AbstractColumn;
 use Aziz403\UX\Datatable\Column\TwigColumn;
+use Aziz403\UX\Datatable\Helper\Constants;
 use Aziz403\UX\Datatable\Helper\DatatableQueriesHelper;
 use Aziz403\UX\Datatable\Helper\DatatableTemplatingHelper;
 use Doctrine\Common\Collections\Criteria;
@@ -21,6 +22,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
+use const Aziz403\UX\Datatable\Helper\LANGUAGES;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
@@ -32,12 +34,15 @@ class EntityDatatable extends AbstractDatatable
         'serverSide' => true
     ];
 
-    private string $className;
+    private string $className = "";
+
     private ?string $path;
     private array $columns;
 
     private string $language;
-    private bool $isLocalLangTrans;
+
+    private ?string $globalController;
+    private bool $isLangFromCDN;
     private TranslatorInterface $translator;
 
     private ?Criteria $criteria = null;
@@ -61,14 +66,15 @@ class EntityDatatable extends AbstractDatatable
 
         $this->options = array_merge(self::DEFAULT_DATATABLE_OPTIONS,$config['options']);
         $this->language = $config['language'];
-        $this->isLocalLangTrans = !$config['language_from_cdn'];
+        $this->isLangFromCDN = $config['language_from_cdn'];
+        $this->globalController = $config['global_controller'] ?? null;
 
         if(isset($config['template_parameters'])){
             if(isset($config['template_parameters']['style'])){
                 $this->attributes['data-styling-choicer'] = $config['template_parameters']['style'];
             }
             if(isset($config['template_parameters']['className'])){
-                $this->attributes['class'] = $config['template_parameters']['className'];
+                $this->className .= ' '.$config['template_parameters']['className'];
             }
         }
 
@@ -83,6 +89,16 @@ class EntityDatatable extends AbstractDatatable
     public function getClassName(): string
     {
         return $this->className;
+    }
+
+    /**
+     * @param string $className
+     * @return EntityDatatable
+     */
+    public function setClassName(string $className): EntityDatatable
+    {
+        $this->className = $className;
+        return $this;
     }
 
     /**
@@ -184,6 +200,14 @@ class EntityDatatable extends AbstractDatatable
     }
 
     /**
+     * @param string|null $path
+     */
+    public function setPath(?string $path): void
+    {
+        $this->path = $path;
+    }
+
+    /**
      * @return Criteria|null
      */
     public function getCriteria(): ?Criteria
@@ -204,8 +228,12 @@ class EntityDatatable extends AbstractDatatable
      */
     public function getLanguageData(): array
     {
-        if (!$this->isLocalLangTrans) {
-            return ['url' => "//cdn.datatables.net/plug-ins/1.10.15/i18n/$this->language.json"];
+        if ($this->language==null || $this->language=="request") {
+            $this->language = $this->request->getLocale();
+        }
+
+        if ($this->isLangFromCDN) {
+            return ['url' => "//cdn.datatables.net/plug-ins/1.10.15/i18n/{$this->getFullLanguage()}.json"];
         }
 
         return [
@@ -242,6 +270,18 @@ class EntityDatatable extends AbstractDatatable
     }
 
     /**
+     * @return string
+     */
+    public function getFullLanguage(): string
+    {
+        if(!isset(Constants::LANGUAGES[$this->language])){
+            throw new \Exception(sprintf("The Language needs to be a shortcut and one of: %s, or 'request'",implode(",",array_keys(Constants::LANGUAGES))));
+        }
+
+        return Constants::LANGUAGES[$this->language];
+    }
+
+    /**
      * @param string $language
      */
     public function setLanguage(string $language): self
@@ -254,17 +294,17 @@ class EntityDatatable extends AbstractDatatable
     /**
      * @return bool
      */
-    public function isLocalLangTrans(): bool
+    public function isLangFromCDN(): bool
     {
-        return $this->isLocalLangTrans;
+        return $this->isLangFromCDN;
     }
 
     /**
-     * @param bool $isLocalLangTrans
+     * @param bool $isLangFromCDN
      */
-    public function setIsLocalLangTrans(bool $isLocalLangTrans): self
+    public function setLangFromCDN(bool $isLangFromCDN): self
     {
-        $this->isLocalLangTrans = $isLocalLangTrans;
+        $this->isLangFromCDN = $isLangFromCDN;
 
         return $this;
     }
@@ -275,6 +315,44 @@ class EntityDatatable extends AbstractDatatable
     public function getThemeStyling()
     {
         return $this->attributes['data-styling-choicer'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getGlobalController(): ?string
+    {
+        return $this->globalController;
+    }
+
+    /**
+     * @param string|null $globalController
+     * @return EntityDatatable
+     */
+    public function setGlobalController(?string $globalController): EntityDatatable
+    {
+        $this->globalController = $globalController;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getColumnDefs(): array
+    {
+        $columnDefs = [];
+        $i = 0;
+        /** @var AbstractColumn $column */
+        foreach ($this->columns as $column){
+            $columnDefs[] = [
+                'targets' => $i,
+                'visible' => $column->isVisible(),
+                'orderable' => $column->isOrderable()
+            ];
+            $i++;
+        }
+
+        return $columnDefs;
     }
 
     /**
@@ -296,9 +374,12 @@ class EntityDatatable extends AbstractDatatable
         return [
             "path" => $this->path,
             "options" => array_merge(
-                $this->options,
+                array_merge(
+                    $this->options,
+                    ["columnDefs" => $this->getColumnDefs()]
+                ),
                 ["language" => $this->getLanguageData()]
-            )
+            ),
         ];
     }
 

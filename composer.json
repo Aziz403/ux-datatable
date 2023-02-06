@@ -36,14 +36,12 @@
     "doctrine/doctrine-bundle": "^2.0|^2.2|^2.6",
     "doctrine/orm": "~2.13",
     "symfony/twig-bundle": "^4.4.17|^5.0|^6.0",
-    "symfony/webpack-encore-bundle": "^1.11"
+    "symfony/webpack-encore-bundle": "^1.11",
+    "symfony/translation": "^5.4|^6.0"
   },
   "require-dev": {
-    "doctrine/doctrine-fixtures-bundle": "^3.4",
-    "phpunit/phpunit": "^9.5",
-    "symfony/phpunit-bridge": "^5.2|^6.0",
-    "symfony/test-pack": "^1.0",
-    "ext-json": "*"
+    "symfony/phpunit-bridge": "^5.4|^6.0",
+    "zenstruck/foundry": "^1.19"
   },
   "conflict": {
     "symfony/flex": "<1.13",

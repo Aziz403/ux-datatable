@@ -24,7 +24,7 @@ class TextColumn extends AbstractColumn
 
     public function __construct(string $field,?string $displayName = null,bool $visible = true,bool $orderable = true,$render = null,bool $searchable = true)
     {
-        parent::__construct($field,$displayName,$orderable,$visible,$searchable,true);
+        parent::__construct($field,$displayName,$visible,$orderable,$searchable,true);
         $this->render = $render;
     }
 
@@ -32,10 +32,10 @@ class TextColumn extends AbstractColumn
     {
         //check if has custom render condition
         if($this->render && is_callable($this->render)){
-            return call_user_func($this->render,$value);
+            return call_user_func($this->render,$entity,$value);
         }
         //return the same result
-        return $value;
+        return "$value";
     }
 
     public function search(QueryBuilder $builder, string $query): Comparison

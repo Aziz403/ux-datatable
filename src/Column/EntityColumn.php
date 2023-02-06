@@ -49,7 +49,7 @@ class EntityColumn extends AbstractColumn
         }
         //check if has custom render condition
         if($this->render && is_callable($this->render)){
-            return call_user_func($this->render,$value);
+            return call_user_func($this->render,$entity,$value);
         }
         //else check if has specific field to display
         if($this->field){

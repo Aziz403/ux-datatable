@@ -42,16 +42,21 @@ class DatatableExtension extends AbstractExtension
         $datatable->setAttributes(array_merge($datatable->getAttributes(), $attributes));
 
         $controllers = [];
-        $html = "<table ";
+        $html = "<table class='{$datatable->getClassName()}' ";
 
-        //add theme (before main controller)
+        // add theme (before main controller)
         if(($theme = $datatable->getThemeStyling())!='none'){
             $controllers['@aziz403/ux-datatable/styling_'.$theme] = [];
         }
 
-        //add custom controller if exists
+        // add custom controller if exists
         if ($datatable->getDataController()) {
             $controllers[$datatable->getDataController()] = [];
+        }
+
+        // add global controller if exists
+        if($datatable->getGlobalController()){
+            $controllers[$datatable->getGlobalController()] = [];
         }
 
         //add main controller
@@ -83,7 +88,7 @@ class DatatableExtension extends AbstractExtension
 
         $html .= '<thead><tr>';
         foreach ($datatable->getColumns() as $column){
-            $html .= '<th data-column-name="'.$column->getData().'">'.$column->getText().'</th>';
+            $html .= "<th data-column-name='{$column->getData()}'>{$column->getText()}</th>";
         }
         $html .= '</tr></thead>';
 

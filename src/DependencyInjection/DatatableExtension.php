@@ -12,6 +12,7 @@
 namespace Aziz403\UX\Datatable\DependencyInjection;
 
 use Aziz403\UX\Datatable\Twig\DatatableExtension as TwigDatatableExtension;
+use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -20,17 +21,19 @@ use Aziz403\UX\Datatable\Builder\DatatableBuilder;
 use Aziz403\UX\Datatable\Builder\DatatableBuilderInterface;
 use Symfony\WebpackEncoreBundle\Twig\StimulusTwigExtension;
 use Twig\Environment;
+use Twig\Extension\StringLoaderExtension;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
  */
 class DatatableExtension extends Extension
 {
-
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter('datatable.config', $config);
 
         if(class_exists(Environment::class)) {
             $container
