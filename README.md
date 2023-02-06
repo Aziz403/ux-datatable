@@ -1,4 +1,4 @@
-Symfony UX Datatables.net
+UX Datatables.net
 ===================
 
 Symfony UX Datatables.net is a Symfony bundle integrating the
@@ -28,6 +28,4 @@ in your ``package.json`` file.
 
 Documentation
 -----
-
-The documentation is rendered [here](https://github.com/Aziz403/ux-datatable/blob/1.x/docs/index.md).\
-The source of the documentation is available in the /docs folder.
+Read [UxDatatable Docs](/docs/index.md) on the official Symfony website
