@@ -28,4 +28,4 @@ in your ``package.json`` file.
 
 Documentation
 -----
-Read [UxDatatable Docs](/docs/index.md) on the official Symfony website
+Read [UxDatatable Docs](/docs/index.md) on ``docs/index.md``
