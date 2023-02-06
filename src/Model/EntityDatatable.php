@@ -200,6 +200,14 @@ class EntityDatatable extends AbstractDatatable
     }
 
     /**
+     * @param string|null $path
+     */
+    public function setPath(?string $path): void
+    {
+        $this->path = $path;
+    }
+
+    /**
      * @return Criteria|null
      */
     public function getCriteria(): ?Criteria

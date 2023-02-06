@@ -21,6 +21,10 @@ class DataService
             if(isset($name) && lcfirst($name)===$property){
                 return $method;
             }
+
+            if($method===$property){
+                return $method;
+            }
         });
 
         if (count($method)>0) {

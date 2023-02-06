@@ -99,10 +99,18 @@ class DatatableQueriesHelper
 
     public function countRecords(array $query = null)
     {
-        $q = $this->repository->createQueryBuilder($this->alias);
         if($query){
             $q = $this->getQuery($query,false,false);
         }
+        else{
+            $q = $this->repository->createQueryBuilder($this->alias);
+
+            //add criteria if exists
+            if($criteria = $this->datatable->getCriteria()){
+                $q->addCriteria($criteria);
+            }
+        }
+
         return $q->select("COUNT($this->alias.id)")
             ->getQuery()
             ->getSingleScalarResult();
