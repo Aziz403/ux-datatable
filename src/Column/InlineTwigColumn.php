@@ -21,10 +21,7 @@ class InlineTwigColumn extends AbstractColumn
     {
         return $this->environment
             ->createTemplate($this->template)
-            ->render([
-            'entity' => $entity,
-            ...$this->params
-            ])
+            ->render(array_merge(['entity'=>$entity],$this->params))
         ;
     }
 

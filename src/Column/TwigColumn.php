@@ -31,10 +31,7 @@ class TwigColumn extends AbstractColumn
 
     public function render($entity,$value) :string
     {
-        return $this->environment->render($this->template,[
-            'entity' => $entity,
-            ...$this->params
-        ]);
+        return $this->environment->render($this->template,array_merge(['entity'=>$entity],$this->params));
     }
 
     public function search(QueryBuilder $builder, string $query): ?Comparison
