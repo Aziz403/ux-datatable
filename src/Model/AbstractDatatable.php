@@ -30,8 +30,9 @@ abstract class AbstractDatatable
     protected ?string $globalController;
 
     protected string $language;
-
+    protected string $locale;
     protected bool $isLangFromCDN;
+
     protected TranslatorInterface $translator;
 
     protected DatatableTemplatingHelper $templatingService;
@@ -39,7 +40,8 @@ abstract class AbstractDatatable
     public function __construct(
         Environment $environment,
         TranslatorInterface $translator,
-        array $config
+        array $config,
+        string $locale
     )
     {
         $this->columns = [];
@@ -48,6 +50,7 @@ abstract class AbstractDatatable
         $this->language = $config['language'];
         $this->isLangFromCDN = $config['language_from_cdn'];
         $this->globalController = $config['global_controller'] ?? null;
+        $this->locale = $locale;
 
         if(isset($config['template_parameters'])){
             if(isset($config['template_parameters']['style'])){
@@ -303,6 +306,10 @@ abstract class AbstractDatatable
      */
     public function getLanguage(): string
     {
+        if($this->language==null || $this->language=='request'){
+            $this->language = $this->locale;
+        }
+
         return $this->language;
     }
 

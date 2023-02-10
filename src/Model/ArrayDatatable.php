@@ -19,8 +19,6 @@ use Twig\Environment;
  */
 class ArrayDatatable extends AbstractDatatable
 {
-    protected string $locale;
-
     protected array $data = [];
 
     public function __construct(
@@ -31,9 +29,8 @@ class ArrayDatatable extends AbstractDatatable
         string $locale
     )
     {
-        parent::__construct($environment,$translator,$config);
+        parent::__construct($environment,$translator,$config,$locale);
         $this->data = $data;
-        $this->locale = $locale;
     }
 
     /**
@@ -50,18 +47,6 @@ class ArrayDatatable extends AbstractDatatable
     public function setData(array $data): void
     {
         $this->data = $data;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLanguage(): string
-    {
-        if($this->language==null || $this->language=='request'){
-            $this->language = $this->locale;
-        }
-
-        return $this->language;
     }
 
     /**

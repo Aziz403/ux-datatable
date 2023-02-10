@@ -45,10 +45,11 @@ class EntityDatatable extends AbstractDatatable
         EntityRepository $repository,
         Environment $environment,
         TranslatorInterface $translator,
-        array $config
+        array $config,
+        string $locale
     )
     {
-        parent::__construct($environment,$translator,$config);
+        parent::__construct($environment,$translator,$config,$locale);
         
         $this->className = $className;
         $this->attributes['id'] = "datatable_".DataService::toSnakeCase($className);
@@ -106,7 +107,12 @@ class EntityDatatable extends AbstractDatatable
     public function getLanguage(): string
     {
         if($this->language==null || $this->language=='request'){
-            $this->language = $this->request?->getLocale() ?? 'en';
+            if($this->request){
+                $this->language = $this->request->getLocale();
+            }
+            else{
+                $this->language = $this->locale;
+            }
         }
         return $this->language;
     }

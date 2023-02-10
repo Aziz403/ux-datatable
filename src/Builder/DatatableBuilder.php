@@ -59,7 +59,8 @@ class DatatableBuilder implements DatatableBuilderInterface
             $repository,
             $this->templating,
             $this->translator,
-            $this->config
+            $this->config,
+            $this->locale
         );
     }
 
