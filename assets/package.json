@@ -5,20 +5,11 @@
     "version": "1.0.5",
     "symfony": {
         "controllers": {
-            "simple_datatable": {
-                "main": "controllers/simple_controller.js",
+            "datatable": {
+                "main": "controllers/controller.js",
                 "webpackMode": "lazy",
                 "fetch": "lazy",
                 "enabled": true
-            },
-            "entity_datatable": {
-                "main": "controllers/entity_controller.js",
-                "webpackMode": "lazy",
-                "fetch": "lazy",
-                "enabled": true,
-                "autoimport": {
-                    "@aziz403/ux-datatable/css/style.css": true
-                }
             },
             "styling_bootstrap3": {
                 "main": "controllers/styling/bootstrap3_controller.js",

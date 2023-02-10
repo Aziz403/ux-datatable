@@ -41,7 +41,9 @@
   },
   "require-dev": {
     "symfony/phpunit-bridge": "^5.4|^6.0",
-    "zenstruck/foundry": "^1.19"
+    "zenstruck/foundry": "^1.19",
+    "symfony/browser-kit": "^5.4|^6.0",
+    "symfony/css-selector": "^5.4|^6.0"
   },
   "conflict": {
     "symfony/flex": "<1.13",

@@ -6,6 +6,11 @@ use Aziz403\UX\Datatable\Exception\GetterNotFoundException;
 
 class DataService
 {
+    public static function toSnakeCase(string $class)
+    {
+        return strtolower(implode('_', preg_split('/(?=[A-Z])/', lcfirst(substr(__CLASS__, strrpos(__CLASS__, '\\') + 1)))));
+    }
+
     public static function getPropValue(object $object,string $property,array $argements = [])
     {
         $class = \get_class($object);

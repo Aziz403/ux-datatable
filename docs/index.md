@@ -11,9 +11,11 @@ Table of Contents
   * [Step 2: Enable the bundle](/docs/installation.md#step-2-enable-the-bundle-optional) 
 * [Configuration](/docs/configuration.md)
   * [Datatables.net Styling Themes](/docs/themes.md)
-  * [Languages Support](/docs/languages.md)
+  * [Languages & Translation](/docs/languages_and_translation.md)
+  * [Global Customization](/docs/global_controller_example.md)
+* [Datatable From Array](/docs/datatables_from_array.md)
 * [Datatable From Entity](/docs/datatables_from_entity.md)
-  * [Columns](/docs/columns.md)
+* [Columns](/docs/columns.md)
 
 Technical Requirements
 ----------------------

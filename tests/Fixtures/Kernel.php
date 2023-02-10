@@ -13,6 +13,7 @@ namespace Aziz403\UX\Datatable\Tests\Fixtures;
 
 use Aziz403\UX\Datatable\DatatableBundle;
 use Aziz403\UX\Datatable\Tests\Fixtures\Controller\CategoryController;
+use Aziz403\UX\Datatable\Tests\Fixtures\Controller\PostController;
 use Aziz403\UX\Datatable\Tests\Fixtures\Controller\ProductController;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Psr\Log\NullLogger;
@@ -124,5 +125,11 @@ final class Kernel extends BaseKernel
         $routes
             ->add('test_product', '/test-product/{id}')
             ->controller(ProductController::class);
+        $routes
+            ->add('test_post_empty', '/test-post/empty')
+            ->controller([PostController::class,'empty']);
+        $routes
+            ->add('test_post', '/test-post')
+            ->controller([PostController::class,'index']);
     }
 }

@@ -11,18 +11,14 @@
 
 namespace Aziz403\UX\Datatable\Model;
 
-use Aziz403\UX\Datatable\Column\AbstractColumn;
-use Aziz403\UX\Datatable\Column\TwigColumn;
-use Aziz403\UX\Datatable\Helper\Constants;
 use Aziz403\UX\Datatable\Helper\DatatableQueriesHelper;
-use Aziz403\UX\Datatable\Helper\DatatableTemplatingHelper;
+use Aziz403\UX\Datatable\Service\DataService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
-use const Aziz403\UX\Datatable\Helper\LANGUAGES;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
@@ -34,23 +30,15 @@ class EntityDatatable extends AbstractDatatable
         'serverSide' => true
     ];
 
-    private string $className = "";
+    protected string $className = "";
 
-    private ?string $path;
-    private array $columns;
-
-    private string $language;
-
-    private ?string $globalController;
-    private bool $isLangFromCDN;
-    private TranslatorInterface $translator;
+    protected ?string $path;
 
     private ?Criteria $criteria = null;
 
     private ?Request $request = null;
 
     private DatatableQueriesHelper $queriesService;
-    private DatatableTemplatingHelper $templatingService;
 
     public function __construct(
         string $className,
@@ -60,27 +48,13 @@ class EntityDatatable extends AbstractDatatable
         array $config
     )
     {
+        parent::__construct($environment,$translator,$config);
+        
         $this->className = $className;
-        $this->columns = [];
-        $this->attributes['id'] = "table".random_int(9,999);
+        $this->attributes['id'] = "datatable_".DataService::toSnakeCase($className);
+        $this->options = array_merge(self::DEFAULT_DATATABLE_OPTIONS,$this->options);
 
-        $this->options = array_merge(self::DEFAULT_DATATABLE_OPTIONS,$config['options']);
-        $this->language = $config['language'];
-        $this->isLangFromCDN = $config['language_from_cdn'];
-        $this->globalController = $config['global_controller'] ?? null;
-
-        if(isset($config['template_parameters'])){
-            if(isset($config['template_parameters']['style'])){
-                $this->attributes['data-styling-choicer'] = $config['template_parameters']['style'];
-            }
-            if(isset($config['template_parameters']['className'])){
-                $this->className .= ' '.$config['template_parameters']['className'];
-            }
-        }
-
-        $this->translator = $translator;
         $this->queriesService = new DatatableQueriesHelper($repository,$this);
-        $this->templatingService = new DatatableTemplatingHelper($environment,$this);
     }
 
     /**
@@ -98,104 +72,7 @@ class EntityDatatable extends AbstractDatatable
     public function setClassName(string $className): EntityDatatable
     {
         $this->className = $className;
-        return $this;
-    }
-
-    /**
-     * @return AbstractColumn[]
-     */
-    public function getColumns(): array
-    {
-        return $this->columns;
-    }
-
-    /**
-     * @return AbstractColumn[]
-     */
-    public function getSearchableColumns(): array
-    {
-        return array_filter($this->columns,function (AbstractColumn $column) {
-            return $column->isSearchable();
-        });
-    }
-
-    /**
-     * @param string $type
-     * @return array
-     */
-    public function getColumnsByType(string $type): array
-    {
-        return array_filter($this->columns,function (AbstractColumn $column) use ($type) {
-            return $column instanceof $type;
-        });
-    }
-
-    /**
-     * @param string $data
-     * @return AbstractColumn|null
-     */
-    public function getColumn(string $data): ?AbstractColumn
-    {
-        $res = array_filter($this->columns,function (AbstractColumn $column) use($data){
-            return $column->getData()===$data;
-        });
-        if(count($res)==0){
-            return null;
-        }
-        return reset($res);
-    }
-
-    /**
-     * @param int $index
-     * @return AbstractColumn|null
-     */
-    public function getColumnByIndex(int $index): ?AbstractColumn
-    {
-        return $this->columns[$index];
-    }
-
-    /**
-     * @param string $data
-     * @return AbstractColumn|null
-     */
-    public function getColumnIndex(string $data): ?int
-    {
-        return array_search(
-            $this->getColumn($data),
-            $this->columns
-        );
-    }
-
-    /**
-     * @param AbstractColumn[] $columns
-     * @return EntityDatatable
-     */
-    public function setColumns(array $columns): self
-    {
-        $this->columns = $columns;
-
-        return $this;
-    }
-
-    /**
-     * @param AbstractColumn[] $columns
-     * @return EntityDatatable
-     */
-    public function addColumns(array $columns): self
-    {
-        $this->columns = array_merge($this->columns,$columns);
-
-        return $this;
-    }
-
-    /**
-     * @param AbstractColumn $column
-     * @return EntityDatatable
-     */
-    public function addColumn(AbstractColumn $column): self
-    {
-        $this->columns[] = $column;
-
+        
         return $this;
     }
 
@@ -224,135 +101,14 @@ class EntityDatatable extends AbstractDatatable
     }
 
     /**
-     * @return array
-     */
-    public function getLanguageData(): array
-    {
-        if ($this->language==null || $this->language=="request") {
-            $this->language = $this->request->getLocale();
-        }
-
-        if ($this->isLangFromCDN) {
-            return ['url' => "//cdn.datatables.net/plug-ins/1.10.15/i18n/{$this->getFullLanguage()}.json"];
-        }
-
-        return [
-            'processing' => $this->translator->trans('datatable.datatable.processing'),
-            'search' => $this->translator->trans('datatable.datatable.search'),
-            'lengthMenu' => $this->translator->trans('datatable.datatable.lengthMenu'),
-            'info' => $this->translator->trans('datatable.datatable.info'),
-            'infoEmpty' => $this->translator->trans('datatable.datatable.infoEmpty'),
-            'infoFiltered' => $this->translator->trans('datatable.datatable.infoFiltered'),
-            'infoPostFix' => $this->translator->trans('datatable.datatable.infoPostFix'),
-            'loadingRecords' => $this->translator->trans('datatable.datatable.loadingRecords'),
-            'zeroRecords' => $this->translator->trans('datatable.datatable.zeroRecords'),
-            'emptyTable' => $this->translator->trans('datatable.datatable.emptyTable'),
-            'searchPlaceholder' => $this->translator->trans('datatable.datatable.searchPlaceholder'),
-            'paginate' => [
-                'first' => $this->translator->trans('datatable.datatable.paginate.first'),
-                'previous' => $this->translator->trans('datatable.datatable.paginate.previous'),
-                'next' => $this->translator->trans('datatable.datatable.paginate.next'),
-                'last' => $this->translator->trans('datatable.datatable.paginate.last'),
-            ],
-            'aria' => [
-                'sortAscending' => $this->translator->trans('datatable.datatable.aria.sortAscending'),
-                'sortDescending' => $this->translator->trans('datatable.datatable.aria.sortDescending'),
-            ],
-        ];
-    }
-
-    /**
      * @return string
      */
     public function getLanguage(): string
     {
+        if($this->language==null || $this->language=='request'){
+            $this->language = $this->request->getLocale();
+        }
         return $this->language;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFullLanguage(): string
-    {
-        if(!isset(Constants::LANGUAGES[$this->language])){
-            throw new \Exception(sprintf("The Language needs to be a shortcut and one of: %s, or 'request'",implode(",",array_keys(Constants::LANGUAGES))));
-        }
-
-        return Constants::LANGUAGES[$this->language];
-    }
-
-    /**
-     * @param string $language
-     */
-    public function setLanguage(string $language): self
-    {
-        $this->language = $language;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isLangFromCDN(): bool
-    {
-        return $this->isLangFromCDN;
-    }
-
-    /**
-     * @param bool $isLangFromCDN
-     */
-    public function setLangFromCDN(bool $isLangFromCDN): self
-    {
-        $this->isLangFromCDN = $isLangFromCDN;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getThemeStyling()
-    {
-        return $this->attributes['data-styling-choicer'];
-    }
-
-    /**
-     * @return string
-     */
-    public function getGlobalController(): ?string
-    {
-        return $this->globalController;
-    }
-
-    /**
-     * @param string|null $globalController
-     * @return EntityDatatable
-     */
-    public function setGlobalController(?string $globalController): EntityDatatable
-    {
-        $this->globalController = $globalController;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getColumnDefs(): array
-    {
-        $columnDefs = [];
-        $i = 0;
-        /** @var AbstractColumn $column */
-        foreach ($this->columns as $column){
-            $columnDefs[] = [
-                'targets' => $i,
-                'visible' => $column->isVisible(),
-                'orderable' => $column->isOrderable()
-            ];
-            $i++;
-        }
-
-        return $columnDefs;
     }
 
     /**
@@ -364,23 +120,6 @@ class EntityDatatable extends AbstractDatatable
             return false;
         }
         return $this->request->get('draw',false);
-    }
-
-    /**
-     * @return array
-     */
-    public function createView(): array
-    {
-        return [
-            "path" => $this->path,
-            "options" => array_merge(
-                array_merge(
-                    $this->options,
-                    ["columnDefs" => $this->getColumnDefs()]
-                ),
-                ["language" => $this->getLanguageData()]
-            ),
-        ];
     }
 
     /**
@@ -432,5 +171,22 @@ class EntityDatatable extends AbstractDatatable
             "data" => $data,
             "draw" => $draw
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function createView(): array
+    {
+        return [
+            "path" => $this->path,
+            "options" => array_merge(
+                array_merge(
+                    $this->options,
+                    ["columnDefs" => $this->getColumnDefs()]
+                ),
+                ["language" => $this->getLanguageData()]
+            ),
+        ];
     }
 }

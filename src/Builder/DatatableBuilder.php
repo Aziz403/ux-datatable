@@ -11,8 +11,10 @@
 
 namespace Aziz403\UX\Datatable\Builder;
 
+use Aziz403\UX\Datatable\Model\ArrayDatatable;
 use Aziz403\UX\Datatable\Model\EntityDatatable;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -21,6 +23,8 @@ use Twig\Environment;
  */
 class DatatableBuilder implements DatatableBuilderInterface
 {
+    private string $locale;
+
     private EntityManagerInterface $manager;
     private Environment $templating;
     private TranslatorInterface $translator;
@@ -28,12 +32,15 @@ class DatatableBuilder implements DatatableBuilderInterface
     private array $config;
 
     public function __construct(
+        RequestStack $requestStack,
         EntityManagerInterface $manager,
         Environment $templating,
         TranslatorInterface $translator,
         array $config
     )
     {
+        $this->locale = $requestStack->getCurrentRequest()?->getLocale() ?? 'en';
+
         $this->manager = $manager;
         $this->templating = $templating;
         $this->translator = $translator;
@@ -54,5 +61,17 @@ class DatatableBuilder implements DatatableBuilderInterface
             $this->translator,
             $this->config
         );
+    }
+
+    public function createDatatableFromArray(array $columns, array $data): ArrayDatatable
+    {
+        return (new ArrayDatatable(
+            $this->templating,
+            $this->translator,
+            $this->config,
+            $data,
+            $this->locale
+        ))
+        ->setColumns($columns);
     }
 }
