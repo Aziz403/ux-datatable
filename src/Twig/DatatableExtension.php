@@ -11,7 +11,7 @@
 
 namespace Aziz403\UX\Datatable\Twig;
 
-use Aziz403\UX\Datatable\Model\EntityDatatable;
+use Aziz403\UX\Datatable\Model\AbstractDatatable;
 use Symfony\WebpackEncoreBundle\Dto\StimulusControllersDto;
 use Symfony\WebpackEncoreBundle\Twig\StimulusTwigExtension;
 use Twig\Environment;
@@ -37,12 +37,12 @@ class DatatableExtension extends AbstractExtension
         ];
     }
 
-    public function renderDatatable(Environment $env,EntityDatatable $datatable, array $attributes = []): string
+    public function renderDatatable(Environment $env,AbstractDatatable $datatable, array $attributes = []): string
     {
         $datatable->setAttributes(array_merge($datatable->getAttributes(), $attributes));
 
         $controllers = [];
-        $html = "<table class='{$datatable->getClassName()}' ";
+        $html = "<table ";
 
         // add theme (before main controller)
         if(($theme = $datatable->getThemeStyling())!='none'){
@@ -60,7 +60,7 @@ class DatatableExtension extends AbstractExtension
         }
 
         //add main controller
-        $controllers['@aziz403/ux-datatable/entity_datatable'] = ['view' => $datatable->createView()];
+        $controllers['@aziz403/ux-datatable/datatable'] = ['view' => $datatable->createView()];
 
         if (class_exists(StimulusControllersDto::class)) {
             $dto = new StimulusControllersDto($env);

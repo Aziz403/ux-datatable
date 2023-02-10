@@ -1,5 +1,5 @@
-## Installation
-
+Installation
+=========
 ### Step 1: Installation
 
 For Symfony Flex installation you need to enable community recipes:

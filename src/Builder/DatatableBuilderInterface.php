@@ -11,6 +11,7 @@
 
 namespace Aziz403\UX\Datatable\Builder;
 
+use Aziz403\UX\Datatable\Model\ArrayDatatable;
 use Aziz403\UX\Datatable\Model\EntityDatatable;
 
 /**
@@ -19,4 +20,6 @@ use Aziz403\UX\Datatable\Model\EntityDatatable;
 interface DatatableBuilderInterface
 {
     public function createDatatableFromEntity(string $className): EntityDatatable;
+
+    public function createDatatableFromArray(array $columns,array $data): ArrayDatatable;
 }

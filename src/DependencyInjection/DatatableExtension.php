@@ -12,7 +12,6 @@
 namespace Aziz403\UX\Datatable\DependencyInjection;
 
 use Aziz403\UX\Datatable\Twig\DatatableExtension as TwigDatatableExtension;
-use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -38,6 +37,7 @@ class DatatableExtension extends Extension
         if(class_exists(Environment::class)) {
             $container
                 ->setDefinition('datatable.builder', new Definition(DatatableBuilder::class))
+                ->addArgument(new Reference('request_stack'))
                 ->addArgument(new Reference('doctrine.orm.default_entity_manager'))
                 ->addArgument(new Reference('twig'))
                 ->addArgument(new Reference('translator.default'))

@@ -1,7 +1,9 @@
-## Entity datatable usage:
-Entity datatable is awesome tool, it helps you by create ready queries to render entity data as datatable.
+Entity Datatable:
+=========
 
-To use UX Datatable Bundle with EntityDatatable and ready backend api by :
+Entity Datatable is awesome tool, it helps you by create ready queries to render entity data as datatable.
+
+To use UX Datatable Bundle with ``EntityDatatable`` and ready backend api by :
 
     // ...
     use Symfony\UX\Datatable\Model\EntityDatatable;
@@ -45,7 +47,7 @@ To use UX Datatable Bundle with EntityDatatable and ready backend api by :
             }
     
             return $this->render('home/index.html.twig', [
-                'datatable' => $datatable   //send datatable without createView() this time 
+                'datatable' => $datatable
             ]);
         }
     }

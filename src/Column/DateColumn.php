@@ -10,7 +10,7 @@ class DateColumn extends AbstractColumn
     private ?string $format;
     private $render;
 
-    public function __construct(string $field,?string $format = "Y-m-d",?string $displayName = null,bool $visible = true,bool $orderable = true,?callable $render = null,bool $searchable = true)
+    public function __construct(string $field,?string $format = DATE_W3C,?string $displayName = null,bool $visible = true,bool $orderable = true,?callable $render = null,bool $searchable = true)
     {
         parent::__construct($field,$displayName,$visible,$orderable,$searchable,true);
         $this->format = $format;

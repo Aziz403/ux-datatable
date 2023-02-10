@@ -11,7 +11,7 @@
 
 namespace Aziz403\UX\Datatable\Helper;
 
-use Aziz403\UX\Datatable\Model\EntityDatatable;
+use Aziz403\UX\Datatable\Model\AbstractDatatable;
 use Aziz403\UX\Datatable\Service\DataService;
 use Twig\Environment;
 
@@ -21,9 +21,9 @@ use Twig\Environment;
 class DatatableTemplatingHelper
 {
     private Environment $environment;
-    private EntityDatatable $datatable;
+    private AbstractDatatable $datatable;
 
-    public function __construct(Environment $environment,EntityDatatable $datatable)
+    public function __construct(Environment $environment,AbstractDatatable $datatable)
     {
         $this->environment = $environment;
         $this->datatable = $datatable;

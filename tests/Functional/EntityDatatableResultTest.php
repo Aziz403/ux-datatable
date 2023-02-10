@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-class DatatableResultTest extends WebTestCase
+class EntityDatatableResultTest extends WebTestCase
 {
     use ResetDatabase;
 
