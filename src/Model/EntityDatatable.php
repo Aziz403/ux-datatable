@@ -32,7 +32,7 @@ class EntityDatatable extends AbstractDatatable
 
     protected string $className = "";
 
-    protected ?string $path;
+    protected ?string $path = "";
 
     private ?Criteria $criteria = null;
 
@@ -106,7 +106,7 @@ class EntityDatatable extends AbstractDatatable
     public function getLanguage(): string
     {
         if($this->language==null || $this->language=='request'){
-            $this->language = $this->request->getLocale();
+            $this->language = $this->request?->getLocale() ?? 'en';
         }
         return $this->language;
     }
