@@ -26,16 +26,15 @@ But first remember! This is shoud be global configuration and can you change it 
 
 This the Datatable options:
 
-+-------------------+------------------------------------------------------------------------------------------+--------------+
+
 | Option            | Description                                                                              | Value        |
-+===================+==========================================================================================+==============+
+| ---- | ---- | ---- |
 | language_from_cdn | Load Datatable language from ``dataTables.net`` CDN or locally. [See More](/docs/languages_and_translation.md#locally-datatable-translation)   | ``boolean``  |
-+-------------------+------------------------------------------------------------------------------------------+--------------+
+
 | language          | Language will used in Datatable, Also supports locale language base on request. [See More](/docs/languages_and_translation.md#available-language-options) | ``string``   |
-+-------------------+------------------------------------------------------------------------------------------+--------------+
+
 | options           | To set default options to load into ``dataTables.net``, [See More](https://datatables.net/reference/option)  | ``array``    |
-+-------------------+------------------------------------------------------------------------------------------+--------------+
+
 | template_parameters | Style parameters has two options: ``style``: One of ``dataTables.net`` themes. ``className`` class attribute of your table. [See More](/docs/themes.md)   | ``array``    |
-+-------------------+------------------------------------------------------------------------------------------+--------------+
+
 | global_controller | Create and use a custom controller to use custom datatable style,functions,plugins,extensions... [Example](/docs/global_controller_example.md)   | ``boolean``  |
-+-------------------+------------------------------------------------------------------------------------------+--------------+
