@@ -14,6 +14,7 @@ namespace Aziz403\UX\Datatable\Model;
 use Aziz403\UX\Datatable\Column\AbstractColumn;
 use Aziz403\UX\Datatable\Helper\Constants;
 use Aziz403\UX\Datatable\Helper\DatatableTemplatingHelper;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -34,11 +35,10 @@ abstract class AbstractDatatable
     protected bool $isLangFromCDN;
 
     protected TranslatorInterface $translator;
-
-    protected DatatableTemplatingHelper $templatingService;
+    protected EventDispatcherInterface $dispatcher;
 
     public function __construct(
-        Environment $environment,
+        EventDispatcherInterface $dispatcher,
         TranslatorInterface $translator,
         array $config,
         string $locale
@@ -62,8 +62,7 @@ abstract class AbstractDatatable
         }
 
         $this->translator = $translator;
-
-        $this->templatingService = new DatatableTemplatingHelper($environment,$this);
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -318,11 +317,11 @@ abstract class AbstractDatatable
      */
     public function getFullLanguage(): string
     {
-        if(!isset(Constants::LANGUAGES[$this->language])){
-            throw new \Exception(sprintf("'%s' Not Accepted, The Language needs to be a shortcut and one of: %s, or 'request'",$this->language,implode(",",array_keys(Constants::LANGUAGES))));
+        if(!isset(LANGUAGES[$this->language])){
+            throw new \Exception(sprintf("'%s' Not Accepted, The Language needs to be a shortcut and one of: %s, or 'request'",$this->language,implode(",",array_keys(LANGUAGES))));
         }
 
-        return Constants::LANGUAGES[$this->language];
+        return LANGUAGES[$this->language];
     }
 
     /**
@@ -402,3 +401,28 @@ abstract class AbstractDatatable
     public abstract function createView(): array;
 
 }
+
+const LANGUAGES = array(
+    'en' => 'English',
+    'fr' => 'French',
+    'de' => 'German',
+    'es' => 'Spanish',
+    'it' => 'Italian',
+    'pt' => 'Portuguese',
+    'ru' => 'Russian',
+    'zh' => 'Chinese',
+    'ja' => 'Japanese',
+    'ar' => 'Arabic',
+    'hi' => 'Hindi',
+    'bn' => 'Bengali',
+    'sw' => 'Swahili',
+    'mr' => 'Marathi',
+    'ta' => 'Tamil',
+    'tr' => 'Turkish',
+    'pl' => 'Polish',
+    'uk' => 'Ukrainian',
+    'fa' => 'Persian',
+    'ur' => 'Urdu',
+    'he' => 'Hebrew',
+    'th' => 'Thai'
+);

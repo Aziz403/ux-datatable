@@ -1,4 +1,5 @@
-## Languages and Translation
+Languages and Translation
+=========
 
 ### Locally Datatable Translation
 ``language_from_cdn``: Can you specify if you want use the language from your translation files (using **symfony/translation**), by set it to ``false``.

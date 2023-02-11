@@ -104,10 +104,9 @@ final class Kernel extends BaseKernel
             ->defaults()
                 ->autowire()
                 ->autoconfigure()
-            // disable logging errors to the console
             ->set('logger', NullLogger::class)
             ->load(__NAMESPACE__.'\\', __DIR__)
-            ->exclude(['Kernel.php'])
+            ->exclude(['Kernel.php','Entity'])
         ;
 
         $services->alias('public.datatable.builder', 'datatable.builder')

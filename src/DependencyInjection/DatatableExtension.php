@@ -18,9 +18,9 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Aziz403\UX\Datatable\Builder\DatatableBuilder;
 use Aziz403\UX\Datatable\Builder\DatatableBuilderInterface;
+use Aziz403\UX\Datatable\EventListener\RenderSubscriber;
 use Symfony\WebpackEncoreBundle\Twig\StimulusTwigExtension;
 use Twig\Environment;
-use Twig\Extension\StringLoaderExtension;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
@@ -34,12 +34,15 @@ class DatatableExtension extends Extension
 
         $container->setParameter('datatable.config', $config);
 
+        if (!isset($container->getParameter('kernel.bundles')['TwigBundle'])) {
+            throw new \LogicException('The TwigBundle is not registered in your application. Try running "composer require symfony/twig-bundle".');
+        }
+
         if(class_exists(Environment::class)) {
             $container
                 ->setDefinition('datatable.builder', new Definition(DatatableBuilder::class))
                 ->addArgument(new Reference('request_stack'))
-                ->addArgument(new Reference('doctrine.orm.default_entity_manager'))
-                ->addArgument(new Reference('twig'))
+                ->addArgument(new Reference('event_dispatcher'))
                 ->addArgument(new Reference('translator.default'))
                 ->addArgument($config);
             $container
@@ -51,6 +54,13 @@ class DatatableExtension extends Extension
                 ->setDefinition('datatable.twig_extension', new Definition(TwigDatatableExtension::class))
                 ->addArgument(new Reference('webpack_encore.twig_stimulus_extension'))
                 ->addTag('twig.extension');
-        }
+        }      
+
+        $container->register('datatable.event_listener.render_subscriber', RenderSubscriber::class)
+            ->addTag('kernel.event_subscriber')
+            ->addArgument(new Reference('doctrine.orm.default_entity_manager'))
+            ->addArgument(new Reference('twig'))
+            ->addArgument(new Reference('property_accessor'))
+        ;
     }
 }

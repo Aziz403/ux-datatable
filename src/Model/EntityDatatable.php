@@ -11,10 +11,14 @@
 
 namespace Aziz403\UX\Datatable\Model;
 
+use Aziz403\UX\Datatable\Event\Events;
+use Aziz403\UX\Datatable\Event\RenderDataEvent;
+use Aziz403\UX\Datatable\Event\RenderQueryEvent;
 use Aziz403\UX\Datatable\Helper\DatatableQueriesHelper;
 use Aziz403\UX\Datatable\Service\DataService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -38,24 +42,19 @@ class EntityDatatable extends AbstractDatatable
 
     private ?Request $request = null;
 
-    private DatatableQueriesHelper $queriesService;
-
     public function __construct(
         string $className,
-        EntityRepository $repository,
-        Environment $environment,
+        EventDispatcherInterface $dispatcher,
         TranslatorInterface $translator,
         array $config,
         string $locale
     )
     {
-        parent::__construct($environment,$translator,$config,$locale);
+        parent::__construct($dispatcher,$translator,$config,$locale);
         
         $this->className = $className;
         $this->attributes['id'] = "datatable_".DataService::toSnakeCase($className);
         $this->options = array_merge(self::DEFAULT_DATATABLE_OPTIONS,$this->options);
-
-        $this->queriesService = new DatatableQueriesHelper($repository,$this);
     }
 
     /**
@@ -148,7 +147,7 @@ class EntityDatatable extends AbstractDatatable
     {
         //check if request handled
         if(!$this->request){
-            throw new \Exception(Request::class." Not Found,Maybe you forget send Request in EntityDatatable::handleRequest method");
+            throw new \Exception(sprintf("%s Not Found, Maybe you forget send Request in EntityDatatable::handleRequest","Request"));
         }
 
         $query = [
@@ -158,13 +157,18 @@ class EntityDatatable extends AbstractDatatable
             'start' => $this->request->get('start'),
             'length' => $this->request->get('length')
         ];
-        //create query
-        $records = $this->queriesService->findRecords($query);
-        $recordsTotal = $this->queriesService->countRecords();
-        $recordsFiltered = $this->queriesService->countRecords($query);
 
-        //trait data by environment
-        $data = $this->templatingService->renderData($records);
+        $event = new RenderQueryEvent($this,$query);
+        $this->dispatcher->dispatch($event,Events::PRE_QUERY);
+
+        $recordsTotal = $event->getRecordsTotal();
+        $recordsFiltered = $event->getRecordsFiltered();
+        $records = $event->getRecords();
+
+        $event = new RenderDataEvent($this,$records);
+        $this->dispatcher->dispatch($event,Events::PRE_DATA);
+        
+        $records = $event->getRecords();
 
         //clear request
         $draw = $this->request->get('draw',1);
@@ -174,7 +178,7 @@ class EntityDatatable extends AbstractDatatable
         return new JsonResponse([
             "recordsTotal" => $recordsTotal,
             "recordsFiltered" => $recordsFiltered,
-            "data" => $data,
+            "data" => $records,
             "draw" => $draw
         ]);
     }

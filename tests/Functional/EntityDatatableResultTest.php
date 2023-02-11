@@ -22,7 +22,7 @@ class EntityDatatableResultTest extends WebTestCase
 
         $this->assertSame(200,$response->getStatusCode());
         $this->assertSame(count($data['data']),0);
-        $this->assertSame($data['recordsTotal'],"0");
+        $this->assertSame($data['recordsTotal'],0);
     }
 
     public function testDatatableResponseWithData()
@@ -43,7 +43,7 @@ class EntityDatatableResultTest extends WebTestCase
         $data = json_decode($response->getContent(),true);
 
         $this->assertSame(200,$response->getStatusCode());
-        $this->assertSame($data["recordsTotal"],"1");
+        $this->assertSame($data["recordsTotal"],1);
     }
 
     public function testDatatableResponseWithSearch()
@@ -67,8 +67,8 @@ class EntityDatatableResultTest extends WebTestCase
         $data = json_decode($response->getContent(),true);
 
         $this->assertSame(200,$response->getStatusCode());
-        $this->assertSame($data["recordsTotal"],"2");
-        $this->assertSame($data["recordsFiltered"],"1");
+        $this->assertSame($data["recordsTotal"],2);
+        $this->assertSame($data["recordsFiltered"],1);
         $this->assertSame($data["data"][0][0],"First Cat");
         $this->assertSame($data["data"][0][1],'<a href="/test-product/1">Products</a>');
     }
@@ -116,7 +116,7 @@ class EntityDatatableResultTest extends WebTestCase
         $data = json_decode($response->getContent(),true);
 
         $this->assertSame(200,$response->getStatusCode());
-        $this->assertSame($data["recordsTotal"],"2");
+        $this->assertSame($data["recordsTotal"],2);
         $this->assertSame($data["data"][0][0],"Product 1");
     }
 }

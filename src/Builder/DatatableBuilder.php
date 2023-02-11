@@ -13,10 +13,9 @@ namespace Aziz403\UX\Datatable\Builder;
 
 use Aziz403\UX\Datatable\Model\ArrayDatatable;
 use Aziz403\UX\Datatable\Model\EntityDatatable;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Environment;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
@@ -25,24 +24,21 @@ class DatatableBuilder implements DatatableBuilderInterface
 {
     private string $locale;
 
-    private EntityManagerInterface $manager;
-    private Environment $templating;
+    private EventDispatcherInterface $dispatcher;
     private TranslatorInterface $translator;
 
     private array $config;
 
     public function __construct(
         RequestStack $requestStack,
-        EntityManagerInterface $manager,
-        Environment $templating,
+        EventDispatcherInterface $dispatcher,
         TranslatorInterface $translator,
         array $config
     )
     {
         $this->locale = $requestStack->getCurrentRequest()?->getLocale() ?? 'en';
 
-        $this->manager = $manager;
-        $this->templating = $templating;
+        $this->dispatcher = $dispatcher;
         $this->translator = $translator;
 
         $this->config = $config;
@@ -50,14 +46,9 @@ class DatatableBuilder implements DatatableBuilderInterface
 
     public function createDatatableFromEntity(string $className): EntityDatatable
     {
-        $repository = $this->manager->getRepository($className);
-        if(!$repository){
-            throw new \Exception("Not Found Repository For Class Name : ".$className);
-        }
         return new EntityDatatable(
             $className,
-            $repository,
-            $this->templating,
+            $this->dispatcher,
             $this->translator,
             $this->config,
             $this->locale
@@ -67,11 +58,11 @@ class DatatableBuilder implements DatatableBuilderInterface
     public function createDatatableFromArray(array $columns, array $data): ArrayDatatable
     {
         return (new ArrayDatatable(
-            $this->templating,
+            $this->dispatcher,
             $this->translator,
             $this->config,
-            $data,
-            $this->locale
+            $this->locale,
+            $data
         ))
         ->setColumns($columns);
     }
