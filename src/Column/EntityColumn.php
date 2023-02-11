@@ -32,8 +32,7 @@ class EntityColumn extends AbstractColumn
 
     public function __construct(string $entity,?string $field = null,?string $displayName = null,$render = null,?string $nullValue = null,string $joinType = self::ENTITY_LEFT_JOIN,bool $visible = true,bool $orderable = true,bool $searchable = true)
     {
-        $randAdd = $field ?? rand(9,999);
-        $data = "$entity.$randAdd";
+        $data = "$entity $field";
         parent::__construct($data,$displayName,$visible,$orderable,$searchable,true);
         $this->entity = $entity;
         $this->field = $field;

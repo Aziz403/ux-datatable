@@ -8,7 +8,7 @@ class DataService
 {
     public static function toSnakeCase(string $class)
     {
-        return strtolower(implode('_', preg_split('/(?=[A-Z])/', lcfirst(substr(__CLASS__, strrpos(__CLASS__, '\\') + 1)))));
+        return strtolower(implode('_', preg_split('/(?=[A-Z])/', lcfirst(substr($class, strrpos($class, '\\') + 1)))));
     }
 
     public static function getPropValue(object $object,string $property,array $argements = [])

@@ -14,6 +14,7 @@ namespace Aziz403\UX\Datatable\Model;
 use Aziz403\UX\Datatable\Column\AbstractColumn;
 use Aziz403\UX\Datatable\Helper\Constants;
 use Aziz403\UX\Datatable\Helper\DatatableTemplatingHelper;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -30,16 +31,17 @@ abstract class AbstractDatatable
     protected ?string $globalController;
 
     protected string $language;
-
+    protected string $locale;
     protected bool $isLangFromCDN;
-    protected TranslatorInterface $translator;
 
-    protected DatatableTemplatingHelper $templatingService;
+    protected TranslatorInterface $translator;
+    protected EventDispatcherInterface $dispatcher;
 
     public function __construct(
-        Environment $environment,
+        EventDispatcherInterface $dispatcher,
         TranslatorInterface $translator,
-        array $config
+        array $config,
+        string $locale
     )
     {
         $this->columns = [];
@@ -48,6 +50,7 @@ abstract class AbstractDatatable
         $this->language = $config['language'];
         $this->isLangFromCDN = $config['language_from_cdn'];
         $this->globalController = $config['global_controller'] ?? null;
+        $this->locale = $locale;
 
         if(isset($config['template_parameters'])){
             if(isset($config['template_parameters']['style'])){
@@ -59,8 +62,7 @@ abstract class AbstractDatatable
         }
 
         $this->translator = $translator;
-
-        $this->templatingService = new DatatableTemplatingHelper($environment,$this);
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -231,7 +233,6 @@ abstract class AbstractDatatable
 
     /**
      * @param AbstractColumn[] $columns
-     * @return AbstractDatatable
      */
     public function setColumns(array $columns): self
     {
@@ -242,7 +243,6 @@ abstract class AbstractDatatable
 
     /**
      * @param AbstractColumn[] $columns
-     * @return AbstractDatatable
      */
     public function addColumns(array $columns): self
     {
@@ -253,7 +253,6 @@ abstract class AbstractDatatable
 
     /**
      * @param AbstractColumn $column
-     * @return AbstractDatatable
      */
     public function addColumn(AbstractColumn $column): self
     {
@@ -303,6 +302,10 @@ abstract class AbstractDatatable
      */
     public function getLanguage(): string
     {
+        if($this->language==null || $this->language=='request'){
+            $this->language = $this->locale;
+        }
+
         return $this->language;
     }
 
@@ -311,11 +314,11 @@ abstract class AbstractDatatable
      */
     public function getFullLanguage(): string
     {
-        if(!isset(Constants::LANGUAGES[$this->language])){
-            throw new \Exception(sprintf("'%s' Not Accepted, The Language needs to be a shortcut and one of: %s, or 'request'",$this->language,implode(",",array_keys(Constants::LANGUAGES))));
+        if(!isset(LANGUAGES[$this->language])){
+            throw new \Exception(sprintf("'%s' Not Accepted, The Language needs to be a shortcut and one of: %s, or 'request'",$this->language,implode(",",array_keys(LANGUAGES))));
         }
 
-        return Constants::LANGUAGES[$this->language];
+        return LANGUAGES[$this->language];
     }
 
     /**
@@ -364,7 +367,6 @@ abstract class AbstractDatatable
 
     /**
      * @param string|null $globalController
-     * @return AbstractDatatable
      */
     public function setGlobalController(?string $globalController): AbstractDatatable
     {
@@ -395,3 +397,28 @@ abstract class AbstractDatatable
     public abstract function createView(): array;
 
 }
+
+const LANGUAGES = array(
+    'en' => 'English',
+    'fr' => 'French',
+    'de' => 'German',
+    'es' => 'Spanish',
+    'it' => 'Italian',
+    'pt' => 'Portuguese',
+    'ru' => 'Russian',
+    'zh' => 'Chinese',
+    'ja' => 'Japanese',
+    'ar' => 'Arabic',
+    'hi' => 'Hindi',
+    'bn' => 'Bengali',
+    'sw' => 'Swahili',
+    'mr' => 'Marathi',
+    'ta' => 'Tamil',
+    'tr' => 'Turkish',
+    'pl' => 'Polish',
+    'uk' => 'Ukrainian',
+    'fa' => 'Persian',
+    'ur' => 'Urdu',
+    'he' => 'Hebrew',
+    'th' => 'Thai'
+);

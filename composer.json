@@ -37,7 +37,9 @@
     "doctrine/orm": "~2.13",
     "symfony/twig-bundle": "^4.4.17|^5.0|^6.0",
     "symfony/webpack-encore-bundle": "^1.11",
-    "symfony/translation": "^5.4|^6.0"
+    "symfony/translation": "^5.4|^6.0",
+    "symfony/event-dispatcher": "^5.4|^6.0",
+    "symfony/property-access": "^5.4|^6.0"
   },
   "require-dev": {
     "symfony/phpunit-bridge": "^5.4|^6.0",

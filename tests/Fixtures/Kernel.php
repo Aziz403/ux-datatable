@@ -14,6 +14,7 @@ namespace Aziz403\UX\Datatable\Tests\Fixtures;
 use Aziz403\UX\Datatable\DatatableBundle;
 use Aziz403\UX\Datatable\Tests\Fixtures\Controller\CategoryController;
 use Aziz403\UX\Datatable\Tests\Fixtures\Controller\PostController;
+use Aziz403\UX\Datatable\Tests\Fixtures\Controller\Product2Controller;
 use Aziz403\UX\Datatable\Tests\Fixtures\Controller\ProductController;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Psr\Log\NullLogger;
@@ -104,10 +105,9 @@ final class Kernel extends BaseKernel
             ->defaults()
                 ->autowire()
                 ->autoconfigure()
-            // disable logging errors to the console
             ->set('logger', NullLogger::class)
             ->load(__NAMESPACE__.'\\', __DIR__)
-            ->exclude(['Kernel.php'])
+            ->exclude(['Kernel.php','Entity'])
         ;
 
         $services->alias('public.datatable.builder', 'datatable.builder')
@@ -122,6 +122,9 @@ final class Kernel extends BaseKernel
         $routes
             ->add('test_category', '/test-category')
             ->controller(CategoryController::class);
+        $routes
+            ->add('test_product2', '/test-product2')
+            ->controller(Product2Controller::class);
         $routes
             ->add('test_product', '/test-product/{id}')
             ->controller(ProductController::class);

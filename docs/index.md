@@ -16,6 +16,7 @@ Table of Contents
 * [Datatable From Array](/docs/datatables_from_array.md)
 * [Datatable From Entity](/docs/datatables_from_entity.md)
 * [Columns](/docs/columns.md)
+* [Events](/docs/event.md)
 
 Technical Requirements
 ----------------------

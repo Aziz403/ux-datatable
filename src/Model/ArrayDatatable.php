@@ -11,29 +11,28 @@
 
 namespace Aziz403\UX\Datatable\Model;
 
+use Aziz403\UX\Datatable\Event\Events;
+use Aziz403\UX\Datatable\Event\RenderDataEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Environment;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
  */
 class ArrayDatatable extends AbstractDatatable
 {
-    protected string $locale;
-
     protected array $data = [];
 
     public function __construct(
-        Environment $environment,
+        EventDispatcherInterface $dispatcher,
         TranslatorInterface $translator,
         array $config,
+        string $locale,
         array $data,
-        string $locale
     )
     {
-        parent::__construct($environment,$translator,$config);
+        parent::__construct($dispatcher,$translator,$config,$locale);
         $this->data = $data;
-        $this->locale = $locale;
     }
 
     /**
@@ -50,18 +49,6 @@ class ArrayDatatable extends AbstractDatatable
     public function setData(array $data): void
     {
         $this->data = $data;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLanguage(): string
-    {
-        if($this->language==null || $this->language=='request'){
-            $this->language = $this->locale;
-        }
-
-        return $this->language;
     }
 
     /**
@@ -83,6 +70,14 @@ class ArrayDatatable extends AbstractDatatable
         return $columns;
     }
 
+    public function renderData()
+    {
+        $event = new RenderDataEvent($this,$this->data);
+        $this->dispatcher->dispatch($event,Events::PRE_DATA);
+
+        return $event->getRecords();
+    }
+
     /**
      * @return array
      */
@@ -95,7 +90,7 @@ class ArrayDatatable extends AbstractDatatable
                     "columns" => $this->getColumnsView(),
                     "columnDefs" => $this->getColumnDefs(),
                     "language" => $this->getLanguageData(),
-                    "data" => $this->data
+                    "data" => $this->renderData()
                 ]
             ),
         ];
