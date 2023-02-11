@@ -3,7 +3,8 @@
 ### Locally Datatable Translation
 ``language_from_cdn``: Can you specify if you want use the language from your translation files (using **symfony/translation**), by set it to ``false``.
 And in this is situation should you translation missing datatable words:
-| Words          | 
+
+| Words | 
 | ---- |
 | datatable.datatable.processing |
 | datatable.datatable.search |
