@@ -12,11 +12,13 @@
 namespace Aziz403\UX\Datatable\Helper;
 
 use Aziz403\UX\Datatable\Column\EntityColumn;
-use Aziz403\UX\Datatable\Event\RenderQueryEvent;
+use Aziz403\UX\Datatable\Event\Events;
+use Aziz403\UX\Datatable\Event\RenderSearchQueryEvent;
 use Aziz403\UX\Datatable\Model\EntityDatatable;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
@@ -25,15 +27,17 @@ class DatatableQueriesHelper
 {
     private EntityDatatable $datatable;
     private EntityRepository $repository;
+    private EventDispatcherInterface $dispatcher;
     private string $alias;
 
-    public function __construct(EntityManagerInterface $manager,EntityDatatable $datatable)
+    public function __construct(EntityManagerInterface $manager,EventDispatcherInterface $dispatcher,EntityDatatable $datatable)
     {
         $this->datatable = $datatable;
         $this->repository = $manager->getRepository($datatable->getClassName());
         if(!$this->repository){
             throw new \LogicException(sprintf("%s Repository Not Found ",$datatable->getClassName()));
         }
+        $this->dispatcher = $dispatcher;
         $this->alias = "entity";
     }
 
@@ -52,6 +56,10 @@ class DatatableQueriesHelper
     {
         //create query
         $q = $this->getBaseQuery();
+
+        $event = new RenderSearchQueryEvent($this->datatable,$q);
+        $this->dispatcher->dispatch($event,Events::SEARCH_QUERY);
+        $q = $event->getQuery();
 
         //add join entities
         /** @var EntityColumn $column */

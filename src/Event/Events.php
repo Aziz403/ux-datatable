@@ -18,5 +18,7 @@
  {
     public const PRE_QUERY = 'datatable.pre_query';
 
+    public const SEARCH_QUERY = 'datatable.search_query';
+
     public const PRE_DATA = 'datatable.pre_data';
  }

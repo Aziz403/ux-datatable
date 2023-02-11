@@ -61,6 +61,7 @@ class DatatableExtension extends Extension
             ->addArgument(new Reference('doctrine.orm.default_entity_manager'))
             ->addArgument(new Reference('twig'))
             ->addArgument(new Reference('property_accessor'))
+            ->addArgument(new Reference('event_dispatcher'))
         ;
     }
 }

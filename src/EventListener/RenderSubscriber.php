@@ -17,6 +17,7 @@ use Aziz403\UX\Datatable\Event\RenderQueryEvent;
 use Aziz403\UX\Datatable\Helper\DatatableQueriesHelper;
 use Aziz403\UX\Datatable\Helper\DatatableTemplatingHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Twig\Environment;
@@ -32,12 +33,17 @@ final class RenderSubscriber implements EventSubscriberInterface
     private EntityManagerInterface $manager;
     private Environment $templating;
     private PropertyAccessorInterface $propertyAccessor;
+    private EventDispatcherInterface $dispatcher;
 
-    public function __construct(EntityManagerInterface $manager,Environment $templating,PropertyAccessorInterface $propertyAccessor)
+    public function __construct(EntityManagerInterface $manager,
+                                Environment $templating,
+                                PropertyAccessorInterface $propertyAccessor,
+                                EventDispatcherInterface $dispatcher)
     {
         $this->manager = $manager;
         $this->templating = $templating;
         $this->propertyAccessor = $propertyAccessor;
+        $this->dispatcher = $dispatcher;
     }
 
     public function onRenderQuery(RenderQueryEvent $event): void
@@ -55,6 +61,7 @@ final class RenderSubscriber implements EventSubscriberInterface
         
         $helper = new DatatableQueriesHelper(
             $this->manager,
+            $this->dispatcher,
             $datatable
         );
 

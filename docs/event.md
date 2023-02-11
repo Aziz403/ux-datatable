@@ -10,6 +10,7 @@ The following is a list of events you can listen to:
 | Event name | Event constant | Event argement | Trigger point |
 |------------|----------------|----------------|--------------|
 | `datatable.pre_query` | `Events::PRE_QUERY` | `RenderQueryEvent::class` | before create query to get records |
+| `datatable.search_query` | `Events::SEARCH_QUERY` | `RenderSearchQueryEvent::class` | after create query builder to get records |
 | `datatable.pre_data` | `Events::PRE_DATA` | `RenderDataEvent::class` | before create convert query result to view data |
 
 ### Example
