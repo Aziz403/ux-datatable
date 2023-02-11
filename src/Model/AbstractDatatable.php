@@ -233,7 +233,6 @@ abstract class AbstractDatatable
 
     /**
      * @param AbstractColumn[] $columns
-     * @return AbstractDatatable
      */
     public function setColumns(array $columns): self
     {
@@ -244,7 +243,6 @@ abstract class AbstractDatatable
 
     /**
      * @param AbstractColumn[] $columns
-     * @return AbstractDatatable
      */
     public function addColumns(array $columns): self
     {
@@ -255,7 +253,6 @@ abstract class AbstractDatatable
 
     /**
      * @param AbstractColumn $column
-     * @return AbstractDatatable
      */
     public function addColumn(AbstractColumn $column): self
     {
@@ -370,7 +367,6 @@ abstract class AbstractDatatable
 
     /**
      * @param string|null $globalController
-     * @return AbstractDatatable
      */
     public function setGlobalController(?string $globalController): AbstractDatatable
     {

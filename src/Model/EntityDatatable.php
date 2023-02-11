@@ -14,15 +14,12 @@ namespace Aziz403\UX\Datatable\Model;
 use Aziz403\UX\Datatable\Event\Events;
 use Aziz403\UX\Datatable\Event\RenderDataEvent;
 use Aziz403\UX\Datatable\Event\RenderQueryEvent;
-use Aziz403\UX\Datatable\Helper\DatatableQueriesHelper;
 use Aziz403\UX\Datatable\Service\DataService;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Environment;
 
 /**
  * @author Aziz Benmallouk <azizbenmallouk4@gmail.com>
@@ -98,6 +95,11 @@ class EntityDatatable extends AbstractDatatable
     public function setCriteria(Criteria $criteria): void
     {
         $this->criteria = $criteria;
+    }
+
+    public function addFilter(callable $function,int $priority = 0)
+    {
+        $this->dispatcher->addListener(Events::SEARCH_QUERY,$function,$priority);
     }
 
     /**
