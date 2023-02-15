@@ -2,7 +2,7 @@
   "name": "aziz403/ux-datatable",
   "type": "symfony-bundle",
   "description": "Datatable.net integration for Symfony",
-  "version": "1.0.5",
+  "version": "1.1.1",
   "keywords": [
     "symfony",
     "symfony-ux",
