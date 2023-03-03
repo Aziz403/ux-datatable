@@ -1,7 +1,7 @@
 Themes Configuration
 =========
 
-Change the global datatable theme esay by changing the ``style`` key in configuration:
+Change the global datatable theme by changing the ``style`` key in configuration:
 
 ```yaml
 datatable:
@@ -14,7 +14,7 @@ The available style themes is the same of datatables.net [styling themes](https:
 | ---- | ---- |
 | none | without using any theme |
 | bootstrap3 | [Example](https://datatables.net/examples/styling/bootstrap.html) |
-| bootstrap4 | [Exmaple](https://datatables.net/examples/styling/bootstrap4.html) |
+| bootstrap4 | [Example](https://datatables.net/examples/styling/bootstrap4.html) |
 | bootstrap5 | [Example](https://datatables.net/examples/styling/bootstrap5.html) |
 | foundation | [Example](https://datatables.net/manual/styling/foundation) |
 | bulma | [Example](https://datatables.net/examples/styling/bulma.html) |

@@ -7,7 +7,7 @@ This image explain how events runs:
 
 The following is a list of events you can listen to:
 
-| Event name | Event constant | Event argement | Trigger point |
+| Event name | Event constant | Event argument | Trigger point |
 |------------|----------------|----------------|--------------|
 | `datatable.pre_query` | `Events::PRE_QUERY` | `RenderQueryEvent::class` | before create query to get records |
 | `datatable.search_query` | `Events::SEARCH_QUERY` | `RenderSearchQueryEvent::class` | after create query builder to get records |
@@ -48,7 +48,7 @@ services:
 
 ### Example 2
 
-We also have another way to set event easy ,but this is technique works just with `datatable.search_query` event:
+We also have another way to set event easy, but this is technique works just with `datatable.search_query` event:
 
 ```php
 $datatable = $builder->createDatatableFromEntity(Product::class);
@@ -76,7 +76,7 @@ return $this->render('simple_datatable.html.twig', [
 ]);
 ```
 
-### Different Betwenn ``addCriteria`` and ``addFilter``
+### Different Between ``addCriteria`` and ``addFilter``
 
 To explain the different, lets see examples:
 
@@ -93,8 +93,8 @@ The Result looks like:
 
 #### Using ``addCriteria``
 
-The Criteria applyed for all records, filtered or not!
-This custimize data will be viewed in datatable
+The Criteria applied for all records, filtered or not!
+This customized data will be viewed in datatable
 
 ```
 [
@@ -106,7 +106,7 @@ This custimize data will be viewed in datatable
 
 #### Using ``addFilter``
 
-The Filter applyed jusft to the filtered records.
+The Filter applied just to the filtered records.
 And can you use it to add a custom search or filter.
 
 ```
