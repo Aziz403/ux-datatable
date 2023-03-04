@@ -70,7 +70,7 @@ datatable:
 ```
 
 #### 2 - Local Configuration
-In this is situation the config will be applyed just in the current ``$datatable`` instance:
+In this is situation the config will be applied just in the current ``$datatable`` instance:
 
 ```php
 //....

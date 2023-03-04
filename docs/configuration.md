@@ -22,7 +22,7 @@ datatable:
 ```
 
 Can you customize the config to be compatible with what you're wants.
-But first remember! This is shoud be global configuration and can you change it in your `Datatable`.
+But first remember! This should be global configuration and can you change it in your `Datatable`.
 
 This the Datatable options:
 
